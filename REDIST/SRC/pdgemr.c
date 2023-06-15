@@ -1,3 +1,4 @@
+#include <FCMangle.h>
 #include "redist.h"
 /** $Id: pdgemr.c,v 1.1.1.1 2000/02/15 18:04:09 susan Exp $
   ------------------------------------------------------------------------
@@ -141,20 +142,12 @@
    Modifications by Loic PRYLLI 1995
    ============================================================ */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pdgemr2do_
-#define fortran_mr2dnew pdgemr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PDGEMR2D
-#define fortran_mr2d PDGEMR2DO
-#define dcopy_ DCOPY
-#define dlacpy_ DLACPY
-#else
-#define fortran_mr2d pdgemr2do
-#define fortran_mr2dnew pdgemr2d
-#define dcopy_ dcopy
-#define dlacpy_ dlacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pdgemr2do, PDGEMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pdgemr2d, PDGEMR2D)
+#define dcopy_ FC_GLOBAL(dcopy, DCOPY)
+#define dlacpy_ FC_GLOBAL(dlacpy, DLACPY)
+
 #define Clacpy Cdgelacpy
 void  Clacpy();
 typedef struct {
@@ -240,7 +233,7 @@ extern void Cpdgemr2d();
 #include <stdlib.h>
 #include <assert.h>
 #define DESCLEN 9
-void 
+void
 fortran_mr2d(Int *m, Int *n, double *A, Int *ia, Int *ja, Int desc_A[DESCLEN],
 	     double *B, Int *ib, Int *jb, Int desc_B[DESCLEN])
 {
@@ -248,7 +241,7 @@ fortran_mr2d(Int *m, Int *n, double *A, Int *ia, Int *ja, Int desc_A[DESCLEN],
 	     B, *ib, *jb, (MDESC *) desc_B);
   return;
 }
-void 
+void
 fortran_mr2dnew(Int *m, Int *n, double *A, Int *ia, Int *ja, Int desc_A[DESCLEN],
 		double *B, Int *ib, Int *jb, Int desc_B[DESCLEN], Int *gcontext)
 {
@@ -561,7 +554,7 @@ after_comm:
   free(h_inter);
   free(param);
 }/* distrib */
-static2 void 
+static2 void
 init_chenille(mypnum, nprocs, n0, proc0, n1, proc1, psend, precv, myrang)
   Int   nprocs, mypnum, n0, n1;
   Int  *proc0, *proc1, **psend, **precv, *myrang;
@@ -634,7 +627,7 @@ Int _m,_n,_lda,_ldb; \
       _a += _lda; \
     } \
 }
-static2 Int 
+static2 Int
 block2buff(vi, vinb, hi, hinb, ptra, ma, buff)
   Int   hinb, vinb;
   IDESC *hi, *vi;
@@ -656,7 +649,7 @@ block2buff(vi, vinb, hi, hinb, ptra, ma, buff)
   }
   return sizebuff;
 }
-static2 void 
+static2 void
 buff2block(vi, vinb, hi, hinb, buff, ptrb, mb)
   Int   hinb, vinb;
   IDESC *hi, *vi;
@@ -677,7 +670,7 @@ buff2block(vi, vinb, hi, hinb, buff, ptrb, mb)
     }
   }
 }
-static2 Int 
+static2 Int
 inter_len(Int hinb, IDESC *hi, Int vinb, IDESC *vi)
 {
   Int   hlen, vlen, h, v;
@@ -689,7 +682,7 @@ inter_len(Int hinb, IDESC *hi, Int vinb, IDESC *vi)
     vlen += vi[v].len;
   return hlen * vlen;
 }
-void 
+void
 Clacpy(Int m, Int n, double *a, Int lda, double *b, Int ldb)
 {
   Int   i, j;
@@ -703,7 +696,7 @@ Clacpy(Int m, Int n, double *a, Int lda, double *b, Int ldb)
     a += lda;
   }
 }
-static2 void 
+static2 void
 gridreshape(Int *ctxtp)
 {
   Int   ori, final;	/* original context, and new context created, with

@@ -1,77 +1,70 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: pstrmrdrv.c,v 1.1.1.1 2000/02/15 18:04:11 susan Exp $
- * 
+ *
  * pstrmrdrv.c :
- * 
- * 
+ *
+ *
  * PURPOSE:
- * 
+ *
  * this driver is testing the PSTRMR2D routine. It calls it to obtain a new
  * scattered block data decomposition of a distributed REAL (block scattered)
  * matrix. Then it calls PSTRMR2D for the inverse redistribution and checks
  * the results with the initial data.
- * 
+ *
  * Data are going from a Block Scattered nbrow0 x nbcol0 decomposition on the
  * processor grid p0 x q0, to data distributed in a BS nbrow1 x nbcol1 on the
  * processor grid p1 x q1, then back to the BS nbrow0 x nbcol0 decomposition
  * on the processor grid p0 x q0.
- * 
+ *
  * See pstrmr.c file for detailed info on the PSTRMR2D function.
- * 
- * 
+ *
+ *
  * The testing parameters are read from the file TRMR2D.dat, see the file in the
  * distribution to have an example.
- * 
+ *
  * created by Bernard Tourancheau in April 1994.
- * 
+ *
  * modifications : see sccs history
- * 
+ *
  * ===================================
- * 
- * 
+ *
+ *
  * NOTE :
- * 
+ *
  * - the matrix elements are REAL
- * 
+ *
  * - memory requirements : this procedure requires approximately 3 times the
  * memory space of the initial data block in grid 0 (initial block, copy for
  * test and second redistribution result) and 1 time the memory space of the
  * result data block in grid 1. with  the element size = sizeof(float) bytes,
- * 
- * 
+ *
+ *
  * - use the procedures of the files:
- * 
+ *
  * pstrmr.o pstrmr2.o pstrmraux.o
- * 
- * 
+ *
+ *
  * ======================================
- * 
+ *
  * WARNING ASSUMPTIONS :
- * 
- * 
+ *
+ *
  * ========================================
- * 
- * 
+ *
+ *
  * Planned changes:
- * 
- * 
- * 
+ *
+ *
+ *
  * ========================================= */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pstrmr2do_
-#define fortran_mr2dnew pstrmr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PSTRMR2D
-#define fortran_mr2d PSTRMR2DO
-#define scopy_ SCOPY
-#define slacpy_ SLACPY
-#else
-#define fortran_mr2d pstrmr2do
-#define fortran_mr2dnew pstrmr2d
-#define scopy_ scopy
-#define slacpy_ slacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pstrmr2do, PSTRMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pstrmr2d, PSTRMR2D)
+#define scopy_ FC_GLOBAL(scopy, SCOPY)
+#define slacpy_ FC_GLOBAL(slacpy, SLACPY)
+
 #define Clacpy Cstrlacpy
 void  Clacpy();
 typedef struct {
@@ -174,12 +167,12 @@ initblock(float *block, Int m, Int n)
  * parameters to read is given by a NULL at the end of the args list */
 #ifdef __STDC__
 #include <stdarg.h>
-static void 
+static void
 getparam(FILE * f,...)
 {
 #else
 #include <varargs.h>
-static void 
+static void
 getparam(va_alist)
 va_dcl
 {
@@ -218,7 +211,7 @@ va_dcl
   }
   va_end(ap);
 }
-void 
+void
 initforpvm(Int argc, char *argv[])
 {
   Int   pnum, nproc;

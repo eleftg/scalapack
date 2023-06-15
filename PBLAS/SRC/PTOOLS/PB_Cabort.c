@@ -24,38 +24,7 @@
 #include "../PBblas.h"
 #endif
 
-/*
-*  ---------------------------------------------------------------------
-*  FORTRAN <-> C interface
-*  ---------------------------------------------------------------------
-*
-*  These macros identifies how the PBLAS will be called as follows:
-*
-*  _F2C_ADD_: the FORTRAN compiler expects the name of C functions to be
-*  in all lower case and to have an underscore postfixed it (Suns, Intel
-*  compilers expect this).
-*
-*  _F2C_NOCHANGE: the FORTRAN compiler expects the name of  C  functions
-*  to be in all lower case (IBM RS6K compilers do this).
-*
-*  _F2C_UPCASE: the  FORTRAN  compiler expects the name of  C  functions
-*  to be in all upcase. (Cray compilers expect this).
-*
-*  _F2C_F77ISF2C: the  FORTRAN  compiler in use is f2c, a  FORTRAN  to C
-*  converter.
-*/
-#if (_F2C_CALL_ == _F2C_ADD_ )
-#define PB_NoAbort pb_noabort_
-#endif
-#if (_F2C_CALL_ == _F2C_UPCASE )
-#define PB_NoAbort PB_NOABORT
-#endif
-#if (_F2C_CALL_ == _F2C_NOCHANGE )
-#define PB_NoAbort pb_noabort
-#endif
-#if (_F2C_CALL_ == _F2C_F77ISF2C )
-#define PB_NoAbort pb_noabort__
-#endif
+#define PB_NoAbort FC_GLOBAL_(pb_noabort, PB_NOABORT)
 
 #ifdef __STDC__
 void PB_Cabort( Int ICTXT, char * ROUT, Int INFO )

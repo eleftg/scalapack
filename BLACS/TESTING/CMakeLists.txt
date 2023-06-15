@@ -1,7 +1,7 @@
 set(FTestObj
    blacstest.f btprim.f tools.f)
 
-if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
+if("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
     set_source_files_properties(blacstest.f PROPERTIES COMPILE_FLAGS "-std=legacy")
 endif()
 

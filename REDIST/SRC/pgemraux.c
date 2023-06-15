@@ -1,25 +1,18 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: pgemraux.c,v 1.1.1.1 2000/02/15 18:04:10 susan Exp $
- * 
+ *
  * some functions used by the pigemr2d routine see file pigemr.c for more
  * documentation.
- * 
+ *
  * Created March 1993 by B. Tourancheau (See sccs for modifications). */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pigemr2do_
-#define fortran_mr2dnew pigemr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PIGEMR2D
-#define fortran_mr2d PIGEMR2DO
-#define icopy_ ICOPY
-#define ilacpy_ ILACPY
-#else
-#define fortran_mr2d pigemr2do
-#define fortran_mr2dnew pigemr2d
-#define icopy_ icopy
-#define ilacpy_ ilacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pigemr2do, PIGEMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pigemr2d, PIGEMR2D)
+#define icopy_ FC_GLOBAL(icopy, ICOPY)
+#define ilacpy_ FC_GLOBAL(ilacpy, ILACPY)
+
 #define Clacpy Cigelacpy
 void  Clacpy();
 typedef struct {
@@ -116,7 +109,7 @@ mr2d_malloc(Int n)
   }
   return ptr;
 }
-Int 
+Int
 pgcd(Int a, Int b)
 {
   Int   aux;
@@ -130,7 +123,7 @@ pgcd(Int a, Int b)
       return pgcd(b, aux);
   }
 }
-Int 
+Int
 ppcm(Int a, Int b)
 {
   Int   pg;
@@ -141,7 +134,7 @@ ppcm(Int a, Int b)
  * row number myprow, of a distributed matrix with m rows distributed of on a
  * grid of processors with p rows with blocksize nbrow : this procedure can
  * also be used to compute the number of cols by replacing rows by cols */
-Int 
+Int
 localsize(Int myprow, Int p, Int nbrow, Int m)
 {
   Int   templateheight, blockheight;
@@ -182,7 +175,7 @@ memoryblocksize(MDESC *a)
   return localsize(myprow, p, a->nbrow, a->m) *
 	localsize(mypcol, q, a->nbcol, a->n);
 }
-void 
+void
 checkequal(Int ctxt, Int a)
 {
   Int   np, dummy, nbrow, myp, b;
@@ -200,7 +193,7 @@ checkequal(Int ctxt, Int a)
     Cigesd2d(ctxt, (Int)1, (Int)1, &a, (Int)1, (Int)0, (myp + 1) % np);
   }
 }
-void 
+void
 paramcheck(MDESC *a, Int i, Int j, Int m, Int n, Int p, Int q, Int gcontext)
 {
   Int   p2, q2, myprow, mypcol;
@@ -246,7 +239,7 @@ nbrow=%d,lda=%d,sprow=%d\n",
 /* to change from the submatrix beginning at line i to one beginning at line
  * i' with i'< blocksize return the line number on the local process where
  * the new matrix begin, the new process number, and i' */
-Int 
+Int
 changeorigin(Int myp, Int sp, Int p, Int bs, Int i, Int *decal, Int *newsp)
 {
   Int   tempheight, firstblock, firsttemp;

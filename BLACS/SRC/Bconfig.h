@@ -26,50 +26,6 @@
 #endif
 
 /*
- * These macros define the naming strategy needed for a fortran
- * routine to call a C routine, and whether to build so they may be
- * called from C or fortran.  For the fortran call C interface, ADD_ assumes that
- * fortran calls expect C routines to have an underscore postfixed to the name
- * (Suns, and the Intel expect this).  NOCHANGE indicates that fortran expects
- * the name called by fortran to be identical to that compiled by C
- * (AIX does this).  UPCASE says it expects C routines called by fortran
- * to be in all upcase (CRAY wants this).  The variable FORTRAN_CALL_C is always
- * set to one of these values.  If the BLACS will be called from C, we define
- * INTFACE to be CALL_C, otherwise, it is set to FORTRAN_CALL_C.
- */
-#define ADD_     0
-#define NOCHANGE 1
-#define UPCASE   2
-#define FCISF2C  3
-#define C_CALL   4
-
-#ifdef UpCase
-#define FORTRAN_CALL_C UPCASE
-#endif
-
-#ifdef NoChange
-#define FORTRAN_CALL_C NOCHANGE
-#endif
-
-#ifdef Add_
-#define FORTRAN_CALL_C ADD_
-#endif
-
-#ifdef FortranIsF2C
-#define FORTRAN_CALL_C FCISF2C
-#endif
-
-#ifndef FORTRAN_CALL_C
-#define FORTRAN_CALL_C ADD_
-#endif
-
-#ifdef CallFromC
-#define INTFACE C_CALL
-#else
-#define INTFACE FORTRAN_CALL_C
-#endif
-
-/*
  *  Uncomment these macro definitions, and substitute the topology of your
  *  choice to vary the default topology (TOP = ' ') for broadcast and combines.
 #define DefBSTop '1'

@@ -1,78 +1,71 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: pztrmrdrv.c,v 1.1.1.1 2000/02/15 18:04:11 susan Exp $
- * 
+ *
  * pztrmrdrv.c :
- * 
- * 
+ *
+ *
  * PURPOSE:
- * 
+ *
  * this driver is testing the PZTRMR2D routine. It calls it to obtain a new
  * scattered block data decomposition of a distributed COMPLEX*16 (block
  * scattered) matrix. Then it calls PZTRMR2D for the inverse redistribution
  * and checks the results with the initial data.
- * 
+ *
  * Data are going from a Block Scattered nbrow0 x nbcol0 decomposition on the
  * processor grid p0 x q0, to data distributed in a BS nbrow1 x nbcol1 on the
  * processor grid p1 x q1, then back to the BS nbrow0 x nbcol0 decomposition
  * on the processor grid p0 x q0.
- * 
+ *
  * See pztrmr.c file for detailed info on the PZTRMR2D function.
- * 
- * 
+ *
+ *
  * The testing parameters are read from the file TRMR2D.dat, see the file in the
  * distribution to have an example.
- * 
+ *
  * created by Bernard Tourancheau in April 1994.
- * 
+ *
  * modifications : see sccs history
- * 
+ *
  * ===================================
- * 
- * 
+ *
+ *
  * NOTE :
- * 
+ *
  * - the matrix elements are COMPLEX*16
- * 
+ *
  * - memory requirements : this procedure requires approximately 3 times the
  * memory space of the initial data block in grid 0 (initial block, copy for
  * test and second redistribution result) and 1 time the memory space of the
  * result data block in grid 1. with  the element size = sizeof(dcomplex)
  * bytes,
- * 
- * 
+ *
+ *
  * - use the procedures of the files:
- * 
+ *
  * pztrmr.o pztrmr2.o pztrmraux.o
- * 
- * 
+ *
+ *
  * ======================================
- * 
+ *
  * WARNING ASSUMPTIONS :
- * 
- * 
+ *
+ *
  * ========================================
- * 
- * 
+ *
+ *
  * Planned changes:
- * 
- * 
- * 
+ *
+ *
+ *
  * ========================================= */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pztrmr2do_
-#define fortran_mr2dnew pztrmr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PZTRMR2D
-#define fortran_mr2d PZTRMR2DO
-#define zcopy_ ZCOPY
-#define zlacpy_ ZLACPY
-#else
-#define fortran_mr2d pztrmr2do
-#define fortran_mr2dnew pztrmr2d
-#define zcopy_ zcopy
-#define zlacpy_ zlacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pztrmr2do, PZTRMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pztrmr2d, PZTRMR2D)
+#define zcopy_ FC_GLOBAL(zcopy, ZCOPY)
+#define zlacpy_ FC_GLOBAL(zlacpy, ZLACPY)
+
 #define Clacpy Cztrlacpy
 void  Clacpy();
 typedef struct {
@@ -178,12 +171,12 @@ initblock(dcomplex *block, Int m, Int n)
  * parameters to read is given by a NULL at the end of the args list */
 #ifdef __STDC__
 #include <stdarg.h>
-static void 
+static void
 getparam(FILE * f,...)
 {
 #else
 #include <varargs.h>
-static void 
+static void
 getparam(va_alist)
 va_dcl
 {
@@ -222,7 +215,7 @@ va_dcl
   }
   va_end(ap);
 }
-void 
+void
 initforpvm(Int argc, char *argv[])
 {
   Int   pnum, nproc;

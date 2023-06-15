@@ -1,25 +1,18 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: pztrmr2.c,v 1.1.1.1 2000/02/15 18:04:10 susan Exp $
- * 
+ *
  * some functions used by the pztrmr2d routine see file pztrmr.c for more
  * documentation.
- * 
+ *
  * Created March 1993 by B. Tourancheau (See sccs for modifications). */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pztrmr2do_
-#define fortran_mr2dnew pztrmr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PZTRMR2D
-#define fortran_mr2d PZTRMR2DO
-#define zcopy_ ZCOPY
-#define zlacpy_ ZLACPY
-#else
-#define fortran_mr2d pztrmr2do
-#define fortran_mr2dnew pztrmr2d
-#define zcopy_ zcopy
-#define zlacpy_ zlacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pztrmr2do, PZTRMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pztrmr2d, PZTRMR2D)
+#define zcopy_ FC_GLOBAL(zcopy, ZCOPY)
+#define zlacpy_ FC_GLOBAL(zlacpy, ZLACPY)
+
 #define Clacpy Cztrlacpy
 void  Clacpy();
 typedef struct {
@@ -239,7 +232,7 @@ intersect(uplo, diag,
  * intersections on the local processor. result must be long enough to
  * contains the result that are stocked in IDESC structure, the function
  * returns the number of intersections found */
-Int 
+Int
 scan_intervals(type, ja, jb, n, ma, mb, q0, q1, col0, col1,
 	       result)
   char  type;

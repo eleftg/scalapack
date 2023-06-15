@@ -5,7 +5,7 @@
  * Include the system dependant and user defined stuff
  */
 #include "Bconfig.h"
-
+#include <FCMangle.h>
 /*
  * Data type defining a scope for the BLACS
  */
@@ -275,7 +275,7 @@ Int BI_ContxtNum(BLACSCONTEXT *ctxt);
 #define trsize(diag, m, n, bytes, length)\
 {\
    if ( (diag) == 'u' ) (length) = 1;\
-   else (length) = 0;\
+   else() = 0;\
    if ( (m) > (n) )\
       (length) = ( (n) * ( (m) - (n) ) + ( (n)*(n) ) - ( (n)*(n) )/2 +\
                    (n)/2 - (n) * (length) ) * (bytes);\
@@ -305,223 +305,88 @@ Int BI_ContxtNum(BLACSCONTEXT *ctxt);
 #define BI_MPI_TYPE_FREE(t) MPI_Type_free(t)
 #endif
 
-#if (FORTRAN_CALL_C == NOCHANGE)
-/*
- * These defines set up the naming scheme required to have a fortran
- * routine call a C routine (which is what the BLACS are written in)
- * for the following Fortran to C interface:
- *           FORTRAN CALL               C DECLARATION
- *           call dgebs2d(...)          void dgebs2d(...)
- */
-
 /*
  * Support routines
  */
-#define blacs_pinfo_                   blacs_pinfo
-#define blacs_setup_                   blacs_setup
-#define setpvmtids_                    setpvmtids
-#define blacs_set_                     blacs_set
-#define blacs_get_                     blacs_get
-#define blacs_gridinit_                blacs_gridinit
-#define blacs_gridmap_                 blacs_gridmap
-#define ksendid_                       ksendid
-#define krecvid_                       krecvid
-#define kbsid_                         kbsid
-#define kbrid_                         kbrid
-#define blacs_freebuff_                blacs_freebuff
-#define blacs_gridexit_                blacs_gridexit
-#define blacs_abort_                   blacs_abort
-#define blacs_exit_                    blacs_exit
-#define blacs_gridinfo_                blacs_gridinfo
-#define blacs_pnum_                    blacs_pnum
-#define blacs_pcoord_                  blacs_pcoord
-#define dcputime00_                    dcputime00
-#define dwalltime00_                   dwalltime00
-#define blacs_barrier_                 blacs_barrier
+#define blacs_pinfo_          FC_GLOBAL_(blacs_pinfo, BLACS_PINFO)
+#define blacs_setup_          FC_GLOBAL_(blacs_setup, BLACS_SETUP)
+#define setpvmtids_           FC_GLOBAL(setpvmtids, SETPVMTIDS)
+#define blacs_set_            FC_GLOBAL_(blacs_set, BLACS_SET)
+#define blacs_get_            FC_GLOBAL_(blacs_get, BLACS_GET)
+#define blacs_gridinit_       FC_GLOBAL_(blacs_gridinit, BLACS_GRIDINIT)
+#define blacs_gridmap_        FC_GLOBAL_(blacs_gridmap, BLACS_GRIDMAP)
+#define ksendid_              FC_GLOBAL(ksendid, KSENDID)
+#define krecvid_              FC_GLOBAL(krecvid, KRECVID)
+#define kbsid_                FC_GLOBAL(kbsid, KBSID)
+#define kbrid_                FC_GLOBAL(kbrid, KBRID)
+#define blacs_freebuff_       FC_GLOBAL_(blacs_freebuff, BLACS_FREEBUFF)
+#define blacs_gridexit_       FC_GLOBAL_(blacs_gridexit, BLACS_GRIDEXIT)
+#define blacs_abort_          FC_GLOBAL_(blacs_abort, BLACS_ABORT)
+#define blacs_exit_           FC_GLOBAL_(blacs_exit, BLACS_EXIT)
+#define blacs_gridinfo_       FC_GLOBAL_(blacs_gridinfo, BLACS_GRIDINFO)
+#define blacs_pnum_           FC_GLOBAL_(blacs_pnum, BLACS_PNUM)
+#define blacs_pcoord_         FC_GLOBAL_(blacs_pcoord, BLACS_PCOORD)
+#define dcputime00_           FC_GLOBAL(dcputime00, DCPUTIME00)
+#define dwalltime00_          FC_GLOBAL(dwalltime00, DWALLTIME00)
+#define blacs_barrier_        FC_GLOBAL_(blacs_barrier, BLACS_BARRIER)
 
 /*
  * Main, type dependent, routines
  */
-#define igesd2d_   igesd2d
-#define igerv2d_   igerv2d
-#define igebs2d_   igebs2d
-#define igebr2d_   igebr2d
-#define itrsd2d_   itrsd2d
-#define itrrv2d_   itrrv2d
-#define itrbs2d_   itrbs2d
-#define itrbr2d_   itrbr2d
-#define igsum2d_   igsum2d
-#define igamx2d_   igamx2d
-#define igamn2d_   igamn2d
-#define sgesd2d_   sgesd2d
-#define sgerv2d_   sgerv2d
-#define sgebs2d_   sgebs2d
-#define sgebr2d_   sgebr2d
-#define strsd2d_   strsd2d
-#define strrv2d_   strrv2d
-#define strbs2d_   strbs2d
-#define strbr2d_   strbr2d
-#define sgsum2d_   sgsum2d
-#define sgamx2d_   sgamx2d
-#define sgamn2d_   sgamn2d
-#define dgesd2d_   dgesd2d
-#define dgerv2d_   dgerv2d
-#define dgebs2d_   dgebs2d
-#define dgebr2d_   dgebr2d
-#define dtrsd2d_   dtrsd2d
-#define dtrrv2d_   dtrrv2d
-#define dtrbs2d_   dtrbs2d
-#define dtrbr2d_   dtrbr2d
-#define dgsum2d_   dgsum2d
-#define dgamx2d_   dgamx2d
-#define dgamn2d_   dgamn2d
-#define cgesd2d_   cgesd2d
-#define cgerv2d_   cgerv2d
-#define cgebs2d_   cgebs2d
-#define cgebr2d_   cgebr2d
-#define ctrsd2d_   ctrsd2d
-#define ctrrv2d_   ctrrv2d
-#define ctrbs2d_   ctrbs2d
-#define ctrbr2d_   ctrbr2d
-#define cgsum2d_   cgsum2d
-#define cgamx2d_   cgamx2d
-#define cgamn2d_   cgamn2d
-#define zgesd2d_   zgesd2d
-#define zgerv2d_   zgerv2d
-#define zgebs2d_   zgebs2d
-#define zgebr2d_   zgebr2d
-#define ztrsd2d_   ztrsd2d
-#define ztrrv2d_   ztrrv2d
-#define ztrbs2d_   ztrbs2d
-#define ztrbr2d_   ztrbr2d
-#define zgsum2d_   zgsum2d
-#define zgamx2d_   zgamx2d
-#define zgamn2d_   zgamn2d
-
-#elif (FORTRAN_CALL_C == UPCASE)
-/*
- * These defines set up the naming scheme required to have a fortran
- * routine call a C routine (which is what the BLACS are written in)
- * for the following Fortran to C interface:
- *           FORTRAN CALL               C DECLARATION
- *           call dgebs2d(...)          void DGEBS2D(...)
- */
-/*
- * Support routines
- */
-#define blacs_pinfo_                   BLACS_PINFO
-#define blacs_setup_                   BLACS_SETUP
-#define setpvmtids_                    SETPVMTIDS
-#define blacs_set_                     BLACS_SET
-#define blacs_get_                     BLACS_GET
-#define blacs_gridinit_                BLACS_GRIDINIT
-#define blacs_gridmap_                 BLACS_GRIDMAP
-#define ksendid_                       KSENDID
-#define krecvid_                       KRECVID
-#define kbsid_                         KBSID
-#define kbrid_                         KBRID
-#define blacs_freebuff_                BLACS_FREEBUFF
-#define blacs_gridexit_                BLACS_GRIDEXIT
-#define blacs_abort_                   BLACS_ABORT
-#define blacs_exit_                    BLACS_EXIT
-#define blacs_gridinfo_                BLACS_GRIDINFO
-#define blacs_pnum_                    BLACS_PNUM
-#define blacs_pcoord_                  BLACS_PCOORD
-#define dcputime00_                    DCPUTIME00
-#define dwalltime00_                   DWALLTIME00
-#define blacs_barrier_                 BLACS_BARRIER
-
-/*
- * Main, type dependent, routines
- */
-#define igesd2d_   IGESD2D
-#define igerv2d_   IGERV2D
-#define igebs2d_   IGEBS2D
-#define igebr2d_   IGEBR2D
-#define itrsd2d_   ITRSD2D
-#define itrrv2d_   ITRRV2D
-#define itrbs2d_   ITRBS2D
-#define itrbr2d_   ITRBR2D
-#define igsum2d_   IGSUM2D
-#define igamx2d_   IGAMX2D
-#define igamn2d_   IGAMN2D
-#define sgesd2d_   SGESD2D
-#define sgerv2d_   SGERV2D
-#define sgebs2d_   SGEBS2D
-#define sgebr2d_   SGEBR2D
-#define strsd2d_   STRSD2D
-#define strrv2d_   STRRV2D
-#define strbs2d_   STRBS2D
-#define strbr2d_   STRBR2D
-#define sgsum2d_   SGSUM2D
-#define sgamx2d_   SGAMX2D
-#define sgamn2d_   SGAMN2D
-#define dgesd2d_   DGESD2D
-#define dgerv2d_   DGERV2D
-#define dgebs2d_   DGEBS2D
-#define dgebr2d_   DGEBR2D
-#define dtrsd2d_   DTRSD2D
-#define dtrrv2d_   DTRRV2D
-#define dtrbs2d_   DTRBS2D
-#define dtrbr2d_   DTRBR2D
-#define dgsum2d_   DGSUM2D
-#define dgamx2d_   DGAMX2D
-#define dgamn2d_   DGAMN2D
-#define cgesd2d_   CGESD2D
-#define cgerv2d_   CGERV2D
-#define cgebs2d_   CGEBS2D
-#define cgebr2d_   CGEBR2D
-#define ctrsd2d_   CTRSD2D
-#define ctrrv2d_   CTRRV2D
-#define ctrbs2d_   CTRBS2D
-#define ctrbr2d_   CTRBR2D
-#define cgsum2d_   CGSUM2D
-#define cgamx2d_   CGAMX2D
-#define cgamn2d_   CGAMN2D
-#define zgesd2d_   ZGESD2D
-#define zgerv2d_   ZGERV2D
-#define zgebs2d_   ZGEBS2D
-#define zgebr2d_   ZGEBR2D
-#define ztrsd2d_   ZTRSD2D
-#define ztrrv2d_   ZTRRV2D
-#define ztrbs2d_   ZTRBS2D
-#define ztrbr2d_   ZTRBR2D
-#define zgsum2d_   ZGSUM2D
-#define zgamx2d_   ZGAMX2D
-#define zgamn2d_   ZGAMN2D
-
-#elif (FORTRAN_CALL_C == FCISF2C)
-/*
- * These defines set up the naming scheme required to have a fortran
- * routine call a C routine (which is what the BLACS are written in)
- * for systems where the fortran "compiler" is actually f2c (a fortran
- * to C conversion utility).
- */
-/*
- * Initialization routines
- */
-#define blacs_pinfo_    blacs_pinfo__
-#define blacs_setup_    blacs_setup__
-#define blacs_set_      blacs_set__
-#define blacs_get_      blacs_get__
-#define blacs_gridinit_ blacs_gridinit__
-#define blacs_gridmap_  blacs_gridmap__
-/*
- * Destruction routines
- */
-#define blacs_freebuff_ blacs_freebuff__
-#define blacs_gridexit_ blacs_gridexit__
-#define blacs_abort_    blacs_abort__
-#define blacs_exit_     blacs_exit__
-/*
- * Informational & misc.
- */
-#define blacs_gridinfo_ blacs_gridinfo__
-#define blacs_pnum_     blacs_pnum__
-#define blacs_pcoord_   blacs_pcoord__
-#define blacs_barrier_  blacs_barrier__
-
-#endif
-
+#define igesd2d_   FC_GLOBAL(igesd2d, IGESD2D)
+#define igerv2d_   FC_GLOBAL(igerv2d, IGERV2D)
+#define igebs2d_   FC_GLOBAL(igebs2d, IGEBS2D)
+#define igebr2d_   FC_GLOBAL(igebr2d, IGEBR2D)
+#define itrsd2d_   FC_GLOBAL(itrsd2d, ITRSD2D)
+#define itrrv2d_   FC_GLOBAL(itrrv2d, ITRRV2D)
+#define itrbs2d_   FC_GLOBAL(itrbs2d, ITRBS2D)
+#define itrbr2d_   FC_GLOBAL(itrbr2d, ITRBR2D)
+#define igsum2d_   FC_GLOBAL(igsum2d, IGSUM2D)
+#define igamx2d_   FC_GLOBAL(igamx2d, IGAMX2D)
+#define igamn2d_   FC_GLOBAL(igamn2d, IGAMN2D)
+#define sgesd2d_   FC_GLOBAL(sgesd2d, SGESD2D)
+#define sgerv2d_   FC_GLOBAL(sgerv2d, SGERV2D)
+#define sgebs2d_   FC_GLOBAL(sgebs2d, SGEBS2D)
+#define sgebr2d_   FC_GLOBAL(sgebr2d, SGEBR2D)
+#define strsd2d_   FC_GLOBAL(strsd2d, STRSD2D)
+#define strrv2d_   FC_GLOBAL(strrv2d, STRRV2D)
+#define strbs2d_   FC_GLOBAL(strbs2d, STRBS2D)
+#define strbr2d_   FC_GLOBAL(strbr2d, STRBR2D)
+#define sgsum2d_   FC_GLOBAL(sgsum2d, SGSUM2D)
+#define sgamx2d_   FC_GLOBAL(sgamx2d, SGAMX2D)
+#define sgamn2d_   FC_GLOBAL(sgamn2d, SGAMN2D)
+#define dgesd2d_   FC_GLOBAL(dgesd2d, DGESD2D)
+#define dgerv2d_   FC_GLOBAL(dgerv2d, DGERV2D)
+#define dgebs2d_   FC_GLOBAL(dgebs2d, DGEBS2D)
+#define dgebr2d_   FC_GLOBAL(dgebr2d, DGEBR2D)
+#define dtrsd2d_   FC_GLOBAL(dtrsd2d, DTRSD2D)
+#define dtrrv2d_   FC_GLOBAL(dtrrv2d, DTRRV2D)
+#define dtrbs2d_   FC_GLOBAL(dtrbs2d, DTRBS2D)
+#define dtrbr2d_   FC_GLOBAL(dtrbr2d, DTRBR2D)
+#define dgsum2d_   FC_GLOBAL(dgsum2d, DGSUM2D)
+#define dgamx2d_   FC_GLOBAL(dgamx2d, DGAMX2D)
+#define dgamn2d_   FC_GLOBAL(dgamn2d, DGAMN2D)
+#define cgesd2d_   FC_GLOBAL(cgesd2d, CGESD2D)
+#define cgerv2d_   FC_GLOBAL(cgerv2d, CGERV2D)
+#define cgebs2d_   FC_GLOBAL(cgebs2d, CGEBS2D)
+#define cgebr2d_   FC_GLOBAL(cgebr2d, CGEBR2D)
+#define ctrsd2d_   FC_GLOBAL(ctrsd2d, CTRSD2D)
+#define ctrrv2d_   FC_GLOBAL(ctrrv2d, CTRRV2D)
+#define ctrbs2d_   FC_GLOBAL(ctrbs2d, CTRBS2D)
+#define ctrbr2d_   FC_GLOBAL(ctrbr2d, CTRBR2D)
+#define cgsum2d_   FC_GLOBAL(cgsum2d, CGSUM2D)
+#define cgamx2d_   FC_GLOBAL(cgamx2d, CGAMX2D)
+#define cgamn2d_   FC_GLOBAL(cgamn2d, CGAMN2D)
+#define zgesd2d_   FC_GLOBAL(zgesd2d, ZGESD2D)
+#define zgerv2d_   FC_GLOBAL(zgerv2d, ZGERV2D)
+#define zgebs2d_   FC_GLOBAL(zgebs2d, ZGEBS2D)
+#define zgebr2d_   FC_GLOBAL(zgebr2d, ZGEBR2D)
+#define ztrsd2d_   FC_GLOBAL(ztrsd2d, ZTRSD2D)
+#define ztrrv2d_   FC_GLOBAL(ztrrv2d, ZTRRV2D)
+#define ztrbs2d_   FC_GLOBAL(ztrbs2d, ZTRBS2D)
+#define ztrbr2d_   FC_GLOBAL(ztrbr2d, ZTRBR2D)
+#define zgsum2d_   FC_GLOBAL(zgsum2d, ZGSUM2D)
+#define zgamx2d_   FC_GLOBAL(zgamx2d, ZGAMX2D)
+#define zgamn2d_   FC_GLOBAL(zgamn2d, ZGAMN2D)
 
 #endif

@@ -40,6 +40,7 @@
 *  Include files
 *  ---------------------------------------------------------------------
 */
+#include <FCMangle.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -51,50 +52,6 @@
 
 #if( ( _MACH_ == _T3D_ ) || ( _MACH_ == _T3E_ ) )
 #include <fortran.h>
-#endif
-/*
-*  ---------------------------------------------------------------------
-*  FORTRAN <-> C interface
-*  ---------------------------------------------------------------------
-*
-*  These macros identifies how the PBLAS will be called as follows:
-*
-*  _F2C_ADD_: the FORTRAN compiler expects the name of C functions to be
-*  in all lower case and to have an underscore postfixed it (Suns, Intel
-*  compilers expect this).
-*
-*  _F2C_NOCHANGE: the FORTRAN compiler expects the name of  C  functions
-*  to be in all lower case (IBM RS6K compilers do this).
-*
-*  _F2C_UPCASE: the  FORTRAN  compiler expects the name of  C  functions
-*  to be in all upcase. (Cray compilers expect this).
-*
-*  _F2C_F77ISF2C: the  FORTRAN  compiler in use is f2c, a  FORTRAN  to C
-*  converter.
-*/
-#define    _F2C_ADD_           0
-#define    _F2C_NOCHANGE       1
-#define    _F2C_UPCASE         2
-#define    _F2C_F77ISF2C       3
-
-#ifdef UpCase
-#define    _F2C_CALL_          _F2C_UPCASE
-#endif
-
-#ifdef NoChange
-#define    _F2C_CALL_          _F2C_NOCHANGE
-#endif
-
-#ifdef Add_
-#define    _F2C_CALL_          _F2C_ADD_
-#endif
-
-#ifdef f77IsF2C
-#define    _F2C_CALL_          _F2C_F77ISF2C
-#endif
-
-#ifndef _F2C_CALL_
-#define    _F2C_CALL_          _F2C_ADD_
 #endif
 /*
 *  ---------------------------------------------------------------------

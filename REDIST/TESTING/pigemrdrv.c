@@ -1,77 +1,70 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: pigemrdrv.c,v 1.1.1.1 2000/02/15 18:04:10 susan Exp $
- * 
+ *
  * pigemrdrv.c :
- * 
- * 
+ *
+ *
  * PURPOSE:
- * 
+ *
  * this driver is testing the PIGEMR2D routine. It calls it to obtain a new
  * scattered block data decomposition of a distributed INTEGER (block
  * scattered) matrix. Then it calls PIGEMR2D for the inverse redistribution
  * and checks the results with the initial data.
- * 
+ *
  * Data are going from a Block Scattered nbrow0 x nbcol0 decomposition on the
  * processor grid p0 x q0, to data distributed in a BS nbrow1 x nbcol1 on the
  * processor grid p1 x q1, then back to the BS nbrow0 x nbcol0 decomposition
  * on the processor grid p0 x q0.
- * 
+ *
  * See pigemr.c file for detailed info on the PIGEMR2D function.
- * 
- * 
+ *
+ *
  * The testing parameters are read from the file GEMR2D.dat, see the file in the
  * distribution to have an example.
- * 
+ *
  * created by Bernard Tourancheau in April 1994.
- * 
+ *
  * modifications : see sccs history
- * 
+ *
  * ===================================
- * 
- * 
+ *
+ *
  * NOTE :
- * 
+ *
  * - the matrix elements are INTEGER
- * 
+ *
  * - memory requirements : this procedure requires approximately 3 times the
  * memory space of the initial data block in grid 0 (initial block, copy for
  * test and second redistribution result) and 1 time the memory space of the
  * result data block in grid 1. with  the element size = sizeof(Int) bytes,
- * 
- * 
+ *
+ *
  * - use the procedures of the files:
- * 
+ *
  * pigemr.o pigemr2.o pigemraux.o
- * 
- * 
+ *
+ *
  * ======================================
- * 
+ *
  * WARNING ASSUMPTIONS :
- * 
- * 
+ *
+ *
  * ========================================
- * 
- * 
+ *
+ *
  * Planned changes:
- * 
- * 
- * 
+ *
+ *
+ *
  * ========================================= */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pigemr2do_
-#define fortran_mr2dnew pigemr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PIGEMR2D
-#define fortran_mr2d PIGEMR2DO
-#define icopy_ ICOPY
-#define ilacpy_ ILACPY
-#else
-#define fortran_mr2d pigemr2do
-#define fortran_mr2dnew pigemr2d
-#define icopy_ icopy
-#define ilacpy_ ilacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pigemr2do, PIGEMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pigemr2d, PIGEMR2D)
+#define icopy_ FC_GLOBAL(icopy, ICOPY)
+#define ilacpy_ FC_GLOBAL(ilacpy, ILACPY)
+
 #define Clacpy Cigelacpy
 void  Clacpy();
 typedef struct {
@@ -174,12 +167,12 @@ initblock(Int *block, Int m, Int n)
  * parameters to read is given by a NULL at the end of the args list */
 #ifdef __STDC__
 #include <stdarg.h>
-static void 
+static void
 getparam(FILE * f,...)
 {
 #else
 #include <varargs.h>
-static void 
+static void
 getparam(va_alist)
 va_dcl
 {
@@ -218,7 +211,7 @@ va_dcl
   }
   va_end(ap);
 }
-void 
+void
 initforpvm(Int argc, char *argv[])
 {
   Int   pnum, nproc;

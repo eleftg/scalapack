@@ -15,361 +15,161 @@
 *  #define macro constants
 *  ---------------------------------------------------------------------
 */
-#if( _F2C_CALL_ == _F2C_ADD_ )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine call a C routine. No redefinition is necessary  to  have  the
-*  following FORTRAN to C interface:
-*
-*           FORTRAN CALL                   C DECLARATION
-*           CALL PDGEMM(...)               void pdgemm_(...)
-*
-*  This is the PBLAS default.
-*/
-#define    PB_freebuf_         PB_freebuf_
-#define    PB_topget_          pb_topget_
-#define    PB_topset_          pb_topset_
+#define    pilaenv_      FC_GLOBAL(pilaenv, PILAENV)
+#define    PB_freebuf_   FC_GLOBAL_(pb_freebuf, PB_FREEBUF)
+#define    PB_topget_    FC_GLOBAL_(pb_topget, PB_TOPGET)
+#define    PB_topset_    FC_GLOBAL_(pb_topset, PB_TOPSET)
 
-#endif
+#define    picopy_       FC_GLOBAL(picopy, PICOPY)
+#define    pscopy_       FC_GLOBAL(pscopy, PSCOPY)
+#define    pdcopy_       FC_GLOBAL(pdcopy, PDCOPY)
+#define    pccopy_       FC_GLOBAL(pccopy, PCCOPY)
+#define    pzcopy_       FC_GLOBAL(pzcopy, PZCOPY)
 
-#if( _F2C_CALL_ == _F2C_UPCASE )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine call a C routine. No redefinition is necessary  to  have  the
-*  following FORTRAN to C interface:
-*
-*           FORTRAN CALL                   C DECLARATION
-*           CALL PDGEMM(...)               void PDGEMM(...)
-*/
-#define    pilaenv_            PILAENV
-#define    PB_freebuf_         PB_FREEBUF
-#define    PB_topget_          PB_TOPGET
-#define    PB_topset_          PB_TOPSET
-                                                     /* Level-1 PBLAS */
-#define    picopy_             PICOPY
-#define    pscopy_             PSCOPY
-#define    pdcopy_             PDCOPY
-#define    pccopy_             PCCOPY
-#define    pzcopy_             PZCOPY
+#define    psswap_       FC_GLOBAL(psswap, PSSWAP)
+#define    pdswap_       FC_GLOBAL(pdswap, PDSWAP)
+#define    pcswap_       FC_GLOBAL(pcswap, PCSWAP)
+#define    pzswap_       FC_GLOBAL(pzswap, PZSWAP)
 
-#define    psswap_             PSSWAP
-#define    pdswap_             PDSWAP
-#define    pcswap_             PCSWAP
-#define    pzswap_             PZSWAP
+#define    psaxpy_       FC_GLOBAL(psaxpy, PSAXPY)
+#define    pdaxpy_       FC_GLOBAL(pdaxpy, PDAXPY)
+#define    pcaxpy_       FC_GLOBAL(pcaxpy, PCAXPY)
+#define    pzaxpy_       FC_GLOBAL(pzaxpy, PZAXPY)
 
-#define    psaxpy_             PSAXPY
-#define    pdaxpy_             PDAXPY
-#define    pcaxpy_             PCAXPY
-#define    pzaxpy_             PZAXPY
+#define    psscal_       FC_GLOBAL(psscal, PSSCAL)
+#define    pdscal_       FC_GLOBAL(pdscal, PDSCAL)
+#define    pcscal_       FC_GLOBAL(pcscal, PCSCAL)
+#define    pzscal_       FC_GLOBAL(pzscal, PZSCAL)
+#define    pcsscal_      FC_GLOBAL(pcsscal, PCSSCAL)
+#define    pzdscal_      FC_GLOBAL(pzdscal, PZDSCAL)
 
-#define    psscal_             PSSCAL
-#define    pdscal_             PDSCAL
-#define    pcscal_             PCSCAL
-#define    pzscal_             PZSCAL
-#define    pcsscal_            PCSSCAL
-#define    pzdscal_            PZDSCAL
+#define    psasum_       FC_GLOBAL(psasum, PSASUM)
+#define    pdasum_       FC_GLOBAL(pdasum, PDASUM)
+#define    pscasum_      FC_GLOBAL(pscasum, PSCASUM)
+#define    pdzasum_      FC_GLOBAL(pdzasum, PDZASUM)
 
-#define    psasum_             PSASUM
-#define    pdasum_             PDASUM
-#define    pscasum_            PSCASUM
-#define    pdzasum_            PDZASUM
+#define    psnrm2_       FC_GLOBAL(psnrm2, PSNRM2)
+#define    pdnrm2_       FC_GLOBAL(pdnrm2, PDNRM2)
+#define    pscnrm2_      FC_GLOBAL(pscnrm2, PSCNRM2)
+#define    pdznrm2_      FC_GLOBAL(pdznrm2, PDZNRM2)
 
-#define    psnrm2_             PSNRM2
-#define    pdnrm2_             PDNRM2
-#define    pscnrm2_            PSCNRM2
-#define    pdznrm2_            PDZNRM2
+#define    psdot_        FC_GLOBAL(psdot, PSDOT)
+#define    pddot_        FC_GLOBAL(pddot, PDDOT)
+#define    pcdotu_       FC_GLOBAL(pcdotu, PCDOTU)
+#define    pzdotu_       FC_GLOBAL(pzdotu, PZDOTU)
+#define    pcdotc_       FC_GLOBAL(pcdotc, PCDOTC)
+#define    pzdotc_       FC_GLOBAL(pzdotc, PZDOTC)
 
-#define    psdot_              PSDOT
-#define    pddot_              PDDOT
-#define    pcdotu_             PCDOTU
-#define    pzdotu_             PZDOTU
-#define    pcdotc_             PCDOTC
-#define    pzdotc_             PZDOTC
+#define    psamax_       FC_GLOBAL(psamax, PSAMAX)
+#define    pdamax_       FC_GLOBAL(pdamax, PDAMAX)
+#define    pcamax_       FC_GLOBAL(pcamax, PCAMAX)
+#define    pzamax_       FC_GLOBAL(pzamax, PZAMAX)
 
-#define    psamax_             PSAMAX
-#define    pdamax_             PDAMAX
-#define    pcamax_             PCAMAX
-#define    pzamax_             PZAMAX
+#define    psgemv_       FC_GLOBAL(psgemv, PSGEMV)
+#define    pdgemv_       FC_GLOBAL(pdgemv, PDGEMV)
+#define    pcgemv_       FC_GLOBAL(pcgemv, PCGEMV)
+#define    pzgemv_       FC_GLOBAL(pzgemv, PZGEMV)
 
-#define    psgemv_             PSGEMV
-#define    pdgemv_             PDGEMV
-#define    pcgemv_             PCGEMV
-#define    pzgemv_             PZGEMV
+#define    psagemv_      FC_GLOBAL(psagemv, PSAGEMV)
+#define    pdagemv_      FC_GLOBAL(pdagemv, PDAGEMV)
+#define    pcagemv_      FC_GLOBAL(pcagemv, PCAGEMV)
+#define    pzagemv_      FC_GLOBAL(pzagemv, PZAGEMV)
 
-#define    psagemv_            PSAGEMV
-#define    pdagemv_            PDAGEMV
-#define    pcagemv_            PCAGEMV
-#define    pzagemv_            PZAGEMV
+#define    pssymv_       FC_GLOBAL(pssymv, PSSYMV)
+#define    pdsymv_       FC_GLOBAL(pdsymv, PDSYMV)
+#define    pchemv_       FC_GLOBAL(pchemv, PCHEMV)
+#define    pzhemv_       FC_GLOBAL(pzhemv, PZHEMV)
 
-#define    pssymv_             PSSYMV
-#define    pdsymv_             PDSYMV
-#define    pchemv_             PCHEMV
-#define    pzhemv_             PZHEMV
+#define    psasymv_      FC_GLOBAL(psasymv, PSASYMV)
+#define    pdasymv_      FC_GLOBAL(pdasymv, PDASYMV)
+#define    pcahemv_      FC_GLOBAL(pcahemv, PCAHEMV)
+#define    pzahemv_      FC_GLOBAL(pzahemv, PZAHEMV)
 
-#define    psasymv_            PSASYMV
-#define    pdasymv_            PDASYMV
-#define    pcahemv_            PCAHEMV
-#define    pzahemv_            PZAHEMV
+#define    pstrmv_       FC_GLOBAL(pstrmv, PSTRMV)
+#define    pdtrmv_       FC_GLOBAL(pdtrmv, PDTRMV)
+#define    pctrmv_       FC_GLOBAL(pctrmv, PCTRMV)
+#define    pztrmv_       FC_GLOBAL(pztrmv, PZTRMV)
 
-#define    pstrmv_             PSTRMV
-#define    pdtrmv_             PDTRMV
-#define    pctrmv_             PCTRMV
-#define    pztrmv_             PZTRMV
+#define    psatrmv_      FC_GLOBAL(psatrmv, PSATRMV)
+#define    pdatrmv_      FC_GLOBAL(pdatrmv, PDATRMV)
+#define    pcatrmv_      FC_GLOBAL(pcatrmv, PCATRMV)
+#define    pzatrmv_      FC_GLOBAL(pzatrmv, PZATRMV)
 
-#define    psatrmv_            PSATRMV
-#define    pdatrmv_            PDATRMV
-#define    pcatrmv_            PCATRMV
-#define    pzatrmv_            PZATRMV
+#define    pstrsv_       FC_GLOBAL(pstrsv, PSTRSV)
+#define    pdtrsv_       FC_GLOBAL(pdtrsv, PDTRSV)
+#define    pctrsv_       FC_GLOBAL(pctrsv, PCTRSV)
+#define    pztrsv_       FC_GLOBAL(pztrsv, PZTRSV)
 
-#define    pstrsv_             PSTRSV
-#define    pdtrsv_             PDTRSV
-#define    pctrsv_             PCTRSV
-#define    pztrsv_             PZTRSV
+#define    psger_        FC_GLOBAL(psger, PSGER)
+#define    pdger_        FC_GLOBAL(pdger, PDGER)
+#define    pcgeru_       FC_GLOBAL(pcgeru, PCGERU)
+#define    pzgeru_       FC_GLOBAL(pzgeru, PZGERU)
+#define    pcgerc_       FC_GLOBAL(pcgerc, PCGERC)
+#define    pzgerc_       FC_GLOBAL(pzgerc, PZGERC)
 
-#define    psger_              PSGER
-#define    pdger_              PDGER
-#define    pcgeru_             PCGERU
-#define    pzgeru_             PZGERU
-#define    pcgerc_             PCGERC
-#define    pzgerc_             PZGERC
+#define    pssyr_        FC_GLOBAL(pssyr, PSSYR)
+#define    pdsyr_        FC_GLOBAL(pdsyr, PDSYR)
+#define    pcher_        FC_GLOBAL(pcher, PCHER)
+#define    pzher_        FC_GLOBAL(pzher, PZHER)
 
-#define    pssyr_              PSSYR
-#define    pdsyr_              PDSYR
-#define    pcher_              PCHER
-#define    pzher_              PZHER
+#define    pssyr2_       FC_GLOBAL(pssyr2, PSSYR2)
+#define    pdsyr2_       FC_GLOBAL(pdsyr2, PDSYR2)
+#define    pcher2_       FC_GLOBAL(pcher2, PCHER2)
+#define    pzher2_       FC_GLOBAL(pzher2, PZHER2)
 
-#define    pssyr2_             PSSYR2
-#define    pdsyr2_             PDSYR2
-#define    pcher2_             PCHER2
-#define    pzher2_             PZHER2
+#define    psgeadd_      FC_GLOBAL(psgeadd, PSGEMM)
+#define    pdgeadd_      FC_GLOBAL(pdgeadd, PDGEMM)
+#define    pcgeadd_      FC_GLOBAL(pcgeadd, PCGEMM)
+#define    pzgeadd_      FC_GLOBAL(pzgeadd, PZGEMM)
 
-#define    psgemm_             PSGEMM
-#define    pdgemm_             PDGEMM
-#define    pcgemm_             PCGEMM
-#define    pzgemm_             PZGEMM
+#define    psgemm_       FC_GLOBAL(psgemm, PSGEADD)
+#define    pdgemm_       FC_GLOBAL(pdgemm, PDGEADD)
+#define    pcgemm_       FC_GLOBAL(pcgemm, PCGEADD)
+#define    pzgemm_       FC_GLOBAL(pzgemm, PZGEADD)
 
-#define    psgeadd_            PSGEADD
-#define    pdgeadd_            PDGEADD
-#define    pcgeadd_            PCGEADD
-#define    pzgeadd_            PZGEADD
+#define    pssymm_       FC_GLOBAL(pssymm, PSSYMM)
+#define    pdsymm_       FC_GLOBAL(pdsymm, PDSYMM)
+#define    pcsymm_       FC_GLOBAL(pcsymm, PCSYMM)
+#define    pchemm_       FC_GLOBAL(pchemm, PCHEMM)
+#define    pzsymm_       FC_GLOBAL(pzsymm, PZSYMM)
+#define    pzhemm_       FC_GLOBAL(pzhemm, PZHEMM)
 
-#define    pssymm_             PSSYMM
-#define    pdsymm_             PDSYMM
-#define    pcsymm_             PCSYMM
-#define    pchemm_             PCHEMM
-#define    pzsymm_             PZSYMM
-#define    pzhemm_             PZHEMM
+#define    pstrmm_       FC_GLOBAL(pstrmm, PSTRMM)
+#define    pdtrmm_       FC_GLOBAL(pdtrmm, PDTRMM)
+#define    pctrmm_       FC_GLOBAL(pctrmm, PCTRMM)
+#define    pztrmm_       FC_GLOBAL(pztrmm, PZTRMM)
 
-#define    pstrmm_             PSTRMM
-#define    pdtrmm_             PDTRMM
-#define    pctrmm_             PCTRMM
-#define    pztrmm_             PZTRMM
+#define    pstrsm_       FC_GLOBAL(pstrsm, PSTRSM)
+#define    pdtrsm_       FC_GLOBAL(pdtrsm, PDTRSM)
+#define    pctrsm_       FC_GLOBAL(pctrsm, PCTRSM)
+#define    pztrsm_       FC_GLOBAL(pztrsm, PZTRSM)
 
-#define    pstrsm_             PSTRSM
-#define    pdtrsm_             PDTRSM
-#define    pctrsm_             PCTRSM
-#define    pztrsm_             PZTRSM
+#define    pssyrk_       FC_GLOBAL(pssyrk, PSSYRK)
+#define    pdsyrk_       FC_GLOBAL(pdsyrk, PDSYRK)
+#define    pcsyrk_       FC_GLOBAL(pcsyrk, PCSYRK)
+#define    pcherk_       FC_GLOBAL(pcherk, PCHERK)
+#define    pzsyrk_       FC_GLOBAL(pzsyrk, PZSYRK)
+#define    pzherk_       FC_GLOBAL(pzherk, PZHERK)
 
-#define    pssyrk_             PSSYRK
-#define    pdsyrk_             PDSYRK
-#define    pcsyrk_             PCSYRK
-#define    pcherk_             PCHERK
-#define    pzsyrk_             PZSYRK
-#define    pzherk_             PZHERK
+#define    pssyr2k_      FC_GLOBAL(pssyr2k, PSSYR2K)
+#define    pdsyr2k_      FC_GLOBAL(pdsyr2k, PDSYR2K)
+#define    pcsyr2k_      FC_GLOBAL(pcsyr2k, PCSYR2K)
+#define    pcher2k_      FC_GLOBAL(pcher2k, PCHER2K)
+#define    pzsyr2k_      FC_GLOBAL(pzsyr2k, PZSYR2K)
+#define    pzher2k_      FC_GLOBAL(pzher2k, PZHER2K)
 
-#define    pssyr2k_            PSSYR2K
-#define    pdsyr2k_            PDSYR2K
-#define    pcsyr2k_            PCSYR2K
-#define    pcher2k_            PCHER2K
-#define    pzsyr2k_            PZSYR2K
-#define    pzher2k_            PZHER2K
+#define    pstradd_      FC_GLOBAL(pstradd, PSTRADD)
+#define    pdtradd_      FC_GLOBAL(pdtradd, PDTRADD)
+#define    pctradd_      FC_GLOBAL(pctradd, PCTRADD)
+#define    pztradd_      FC_GLOBAL(pztradd, PZTRADD)
 
-#define    pstradd_            PSTRADD
-#define    pdtradd_            PDTRADD
-#define    pctradd_            PCTRADD
-#define    pztradd_            PZTRADD
+#define    pstran_       FC_GLOBAL(pstran, PSTRAN)
+#define    pdtran_       FC_GLOBAL(pdtran, PDTRAN)
+#define    pctranu_      FC_GLOBAL(pctranu, PCTRANU)
+#define    pztranu_      FC_GLOBAL(pztranu, PZTRANU)
+#define    pctranc_      FC_GLOBAL(pctranc, PCTRANC)
+#define    pztranc_      FC_GLOBAL(pztranc, PZTRANC)
 
-#define    pstran_             PSTRAN
-#define    pdtran_             PDTRAN
-#define    pctranu_            PCTRANU
-#define    pztranu_            PZTRANU
-#define    pctranc_            PCTRANC
-#define    pztranc_            PZTRANC
-
-#endif
-
-#if( _F2C_CALL_ == _F2C_NOCHANGE )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine call a C routine with the following  FORTRAN to C interface:
-*
-*           FORTRAN CALL                   C DECLARATION
-*           CALLL PDGEMM(...)              void pdgemm(...)
-*/
-#define    pilaenv_            pilaenv
-#define    PB_freebuf_         PB_freebuf
-#define    PB_topget_          pb_topget
-#define    PB_topset_          pb_topset
-
-#define    picopy_             picopy
-#define    pscopy_             pscopy
-#define    pdcopy_             pdcopy
-#define    pccopy_             pccopy
-#define    pzcopy_             pzcopy
-
-#define    psswap_             psswap
-#define    pdswap_             pdswap
-#define    pcswap_             pcswap
-#define    pzswap_             pzswap
-
-#define    psaxpy_             psaxpy
-#define    pdaxpy_             pdaxpy
-#define    pcaxpy_             pcaxpy
-#define    pzaxpy_             pzaxpy
-
-#define    psscal_             psscal
-#define    pdscal_             pdscal
-#define    pcscal_             pcscal
-#define    pzscal_             pzscal
-#define    pcsscal_            pcsscal
-#define    pzdscal_            pzdscal
-
-#define    psasum_             psasum
-#define    pdasum_             pdasum
-#define    pscasum_            pscasum
-#define    pdzasum_            pdzasum
-
-#define    psnrm2_             psnrm2
-#define    pdnrm2_             pdnrm2
-#define    pscnrm2_            pscnrm2
-#define    pdznrm2_            pdznrm2
-
-#define    psdot_              psdot
-#define    pddot_              pddot
-#define    pcdotu_             pcdotu
-#define    pzdotu_             pzdotu
-#define    pcdotc_             pcdotc
-#define    pzdotc_             pzdotc
-
-#define    psamax_             psamax
-#define    pdamax_             pdamax
-#define    pcamax_             pcamax
-#define    pzamax_             pzamax
-
-#define    psgemv_             psgemv
-#define    pdgemv_             pdgemv
-#define    pcgemv_             pcgemv
-#define    pzgemv_             pzgemv
-
-#define    psagemv_            psagemv
-#define    pdagemv_            pdagemv
-#define    pcagemv_            pcagemv
-#define    pzagemv_            pzagemv
-
-#define    pssymv_             pssymv
-#define    pdsymv_             pdsymv
-#define    pchemv_             pchemv
-#define    pzhemv_             pzhemv
-
-#define    psasymv_            psasymv
-#define    pdasymv_            pdasymv
-#define    pcahemv_            pcahemv
-#define    pzahemv_            pzahemv
-
-#define    pstrmv_             pstrmv
-#define    pdtrmv_             pdtrmv
-#define    pctrmv_             pctrmv
-#define    pztrmv_             pztrmv
-
-#define    psatrmv_            psatrmv
-#define    pdatrmv_            pdatrmv
-#define    pcatrmv_            pcatrmv
-#define    pzatrmv_            pzatrmv
-
-#define    pstrsv_             pstrsv
-#define    pdtrsv_             pdtrsv
-#define    pctrsv_             pctrsv
-#define    pztrsv_             pztrsv
-
-#define    psger_              psger
-#define    pdger_              pdger
-#define    pcgeru_             pcgeru
-#define    pzgeru_             pzgeru
-#define    pcgerc_             pcgerc
-#define    pzgerc_             pzgerc
-
-#define    pssyr_              pssyr
-#define    pdsyr_              pdsyr
-#define    pcher_              pcher
-#define    pzher_              pzher
-
-#define    pssyr2_             pssyr2
-#define    pdsyr2_             pdsyr2
-#define    pcher2_             pcher2
-#define    pzher2_             pzher2
-
-#define    psgeadd_            psgeadd
-#define    pdgeadd_            pdgeadd
-#define    pcgeadd_            pcgeadd
-#define    pzgeadd_            pzgeadd
-
-#define    psgemm_             psgemm
-#define    pdgemm_             pdgemm
-#define    pcgemm_             pcgemm
-#define    pzgemm_             pzgemm
-
-#define    pssymm_             pssymm
-#define    pdsymm_             pdsymm
-#define    pcsymm_             pcsymm
-#define    pchemm_             pchemm
-#define    pzsymm_             pzsymm
-#define    pzhemm_             pzhemm
-
-#define    pstrmm_             pstrmm
-#define    pdtrmm_             pdtrmm
-#define    pctrmm_             pctrmm
-#define    pztrmm_             pztrmm
-
-#define    pstrsm_             pstrsm
-#define    pdtrsm_             pdtrsm
-#define    pctrsm_             pctrsm
-#define    pztrsm_             pztrsm
-
-#define    pssyrk_             pssyrk
-#define    pdsyrk_             pdsyrk
-#define    pcsyrk_             pcsyrk
-#define    pcherk_             pcherk
-#define    pzsyrk_             pzsyrk
-#define    pzherk_             pzherk
-
-#define    pssyr2k_            pssyr2k
-#define    pdsyr2k_            pdsyr2k
-#define    pcsyr2k_            pcsyr2k
-#define    pcher2k_            pcher2k
-#define    pzsyr2k_            pzsyr2k
-#define    pzher2k_            pzher2k
-
-#define    pstradd_            pstradd
-#define    pdtradd_            pdtradd
-#define    pctradd_            pctradd
-#define    pztradd_            pztradd
-
-#define    pstran_             pstran
-#define    pdtran_             pdtran
-#define    pctranu_            pctranu
-#define    pztranu_            pztranu
-#define    pctranc_            pctranc
-#define    pztranc_            pztranc
-
-#endif
-
-#if( _F2C_CALL_ == _F2C_F77ISF2C )
-
-#define    PB_freebuf_         PB_freebuf__
-#define    PB_topget_          pb_topget__
-#define    PB_topset_          pb_topset__
-
-#endif
 /*
 *  ---------------------------------------------------------------------
 *  Function prototypes

@@ -1,78 +1,71 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: pdgemrdrv.c,v 1.1.1.1 2000/02/15 18:04:11 susan Exp $
- * 
+ *
  * pdgemrdrv.c :
- * 
- * 
+ *
+ *
  * PURPOSE:
- * 
+ *
  * this driver is testing the PDGEMR2D routine. It calls it to obtain a new
  * scattered block data decomposition of a distributed DOUBLE PRECISION
  * (block scattered) matrix. Then it calls PDGEMR2D for the inverse
  * redistribution and checks the results with the initial data.
- * 
+ *
  * Data are going from a Block Scattered nbrow0 x nbcol0 decomposition on the
  * processor grid p0 x q0, to data distributed in a BS nbrow1 x nbcol1 on the
  * processor grid p1 x q1, then back to the BS nbrow0 x nbcol0 decomposition
  * on the processor grid p0 x q0.
- * 
+ *
  * See pdgemr.c file for detailed info on the PDGEMR2D function.
- * 
- * 
+ *
+ *
  * The testing parameters are read from the file GEMR2D.dat, see the file in the
  * distribution to have an example.
- * 
+ *
  * created by Bernard Tourancheau in April 1994.
- * 
+ *
  * modifications : see sccs history
- * 
+ *
  * ===================================
- * 
- * 
+ *
+ *
  * NOTE :
- * 
+ *
  * - the matrix elements are DOUBLE PRECISION
- * 
+ *
  * - memory requirements : this procedure requires approximately 3 times the
  * memory space of the initial data block in grid 0 (initial block, copy for
  * test and second redistribution result) and 1 time the memory space of the
  * result data block in grid 1. with  the element size = sizeof(double)
  * bytes,
- * 
- * 
+ *
+ *
  * - use the procedures of the files:
- * 
+ *
  * pdgemr.o pdgemr2.o pdgemraux.o
- * 
- * 
+ *
+ *
  * ======================================
- * 
+ *
  * WARNING ASSUMPTIONS :
- * 
- * 
+ *
+ *
  * ========================================
- * 
- * 
+ *
+ *
  * Planned changes:
- * 
- * 
- * 
+ *
+ *
+ *
  * ========================================= */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pdgemr2do_
-#define fortran_mr2dnew pdgemr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PDGEMR2D
-#define fortran_mr2d PDGEMR2DO
-#define dcopy_ DCOPY
-#define dlacpy_ DLACPY
-#else
-#define fortran_mr2d pdgemr2do
-#define fortran_mr2dnew pdgemr2d
-#define dcopy_ dcopy
-#define dlacpy_ dlacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pdgemr2do, PDGEMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pdgemr2d, PDGEMR2D)
+#define dcopy_ FC_GLOBAL(dcopy, DCOPY)
+#define dlacpy_ FC_GLOBAL(dlacpy, DLACPY)
+
 #define Clacpy Cdgelacpy
 void  Clacpy();
 typedef struct {
@@ -175,12 +168,12 @@ initblock(double *block, Int m, Int n)
  * parameters to read is given by a NULL at the end of the args list */
 #ifdef __STDC__
 #include <stdarg.h>
-static void 
+static void
 getparam(FILE * f,...)
 {
 #else
 #include <varargs.h>
-static void 
+static void
 getparam(va_alist)
 va_dcl
 {
@@ -219,7 +212,7 @@ va_dcl
   }
   va_end(ap);
 }
-void 
+void
 initforpvm(Int argc, char *argv[])
 {
   Int   pnum, nproc;

@@ -1,25 +1,18 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: pitrmr2.c,v 1.1.1.1 2000/02/15 18:04:08 susan Exp $
- * 
+ *
  * some functions used by the pitrmr2d routine see file pitrmr.c for more
  * documentation.
- * 
+ *
  * Created March 1993 by B. Tourancheau (See sccs for modifications). */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pitrmr2do_
-#define fortran_mr2dnew pitrmr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PITRMR2D
-#define fortran_mr2d PITRMR2DO
-#define icopy_ ICOPY
-#define ilacpy_ ILACPY
-#else
-#define fortran_mr2d pitrmr2do
-#define fortran_mr2dnew pitrmr2d
-#define icopy_ icopy
-#define ilacpy_ ilacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pitrmr2do, PITRMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pitrmr2d, PITRMR2D)
+#define icopy_ FC_GLOBAL(icopy, ICOPY)
+#define ilacpy_ FC_GLOBAL(ilacpy, ILACPY)
+
 #define Clacpy Citrlacpy
 void  Clacpy();
 typedef struct {
@@ -228,7 +221,7 @@ intersect(char *uplo, char *diag,
  * intersections on the local processor. result must be long enough to
  * contains the result that are stocked in IDESC structure, the function
  * returns the number of intersections found */
-Int 
+Int
 scan_intervals(type, ja, jb, n, ma, mb, q0, q1, col0, col1,
 	       result)
   char  type;

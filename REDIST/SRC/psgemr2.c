@@ -1,25 +1,18 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: psgemr2.c,v 1.1.1.1 2000/02/15 18:04:09 susan Exp $
- * 
+ *
  * some functions used by the psgemr2d routine see file psgemr.c for more
  * documentation.
- * 
+ *
  * Created March 1993 by B. Tourancheau (See sccs for modifications). */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d psgemr2do_
-#define fortran_mr2dnew psgemr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PSGEMR2D
-#define fortran_mr2d PSGEMR2DO
-#define scopy_ SCOPY
-#define slacpy_ SLACPY
-#else
-#define fortran_mr2d psgemr2do
-#define fortran_mr2dnew psgemr2d
-#define scopy_ scopy
-#define slacpy_ slacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(psgemr2do, PSGEMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(psgemr2d, PSGEMR2D)
+#define scopy_ FC_GLOBAL(scopy, SCOPY)
+#define slacpy_ FC_GLOBAL(slacpy, SLACPY)
+
 #define Clacpy Csgelacpy
 void  Clacpy();
 typedef struct {
@@ -134,7 +127,7 @@ freememory(float *ptrtobefreed)
  * intersections on the local processor. result must be long enough to
  * contains the result that are stocked in IDESC structure, the function
  * returns the number of intersections found */
-Int 
+Int
 scan_intervals(type, ja, jb, n, ma, mb, q0, q1, col0, col1,
 	       result)
   char  type;

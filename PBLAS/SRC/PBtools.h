@@ -3,7 +3,7 @@
 *  -- PBLAS routine (version 2.0) --
 *     University of Tennessee, Knoxville, Oak Ridge National Laboratory,
 *     and University of California, Berkeley.
-*     March 12, 2002 
+*     March 12, 2002
 *
 *  ---------------------------------------------------------------------
 */
@@ -118,12 +118,12 @@
 *
 *      #define    Mptr( a_, i_, j_, lda_, siz_ ) \
 *                    ( (a_) + ( ( (i_)+(j_)*(lda_) )*(siz_) ) )
-* 
+*
 *  since it can overflow the 32-bit integer "easily".
 *  The following code should fix the problem.
 *  It uses the "off_t" command.
 *
-*  Change made by Julien Langou on Sat. September 12, 2009. 
+*  Change made by Julien Langou on Sat. September 12, 2009.
 *  Fix provided by John Moyard from CNES.
 *
 *  JL :April 2011: Change off_t by long long
@@ -578,301 +578,130 @@
               j = *J - 1; \
            }
 
-#if( _F2C_CALL_ == _F2C_ADD_ )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine called by a C routine. No redefinition is necessary  to  have
-*  the following FORTRAN to C interface:
-*
-*           FORTRAN DECLARATION            C CALL
-*           SUBROUTINE PDFOO(...)          pdfoo_(...)
-*
-*  This is the PBLAS default.
-*/
+#define    immadd_     FC_GLOBAL(immadd, IMMADD)
+#define    smmadd_     FC_GLOBAL(smmadd, SMMADD)
+#define    dmmadd_     FC_GLOBAL(dmmadd, DMMADD)
+#define    cmmadd_     FC_GLOBAL(cmmadd, CMMADD)
+#define    zmmadd_     FC_GLOBAL(zmmadd, ZMMADD)
 
-#endif
+#define    immtadd_    FC_GLOBAL(immtadd, IMMTADD)
+#define    smmtadd_    FC_GLOBAL(smmtadd, SMMTADD)
+#define    dmmtadd_    FC_GLOBAL(dmmtadd, DMMTADD)
+#define    cmmtadd_    FC_GLOBAL(cmmtadd, CMMTADD)
+#define    zmmtadd_    FC_GLOBAL(zmmtadd, ZMMTADD)
 
-#if( _F2C_CALL_ == _F2C_F77ISF2C )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine called by a C routine for systems where  the FORTRAN compiler
-*  is actually f2c (a FORTRAN to C conversion utility).
-*
-*           FORTRAN DECLARATION            C CALL
-*           SUBROUTINE PDFOO(...)          pdfoo__(...)
-*/
+#define    smmcadd_    FC_GLOBAL(smmcadd, SMMCADD)
+#define    dmmcadd_    FC_GLOBAL(dmmcadd, DMMCADD)
+#define    cmmcadd_    FC_GLOBAL(cmmcadd, CMMCADD)
+#define    zmmcadd_    FC_GLOBAL(zmmcadd, ZMMCADD)
 
-#endif
+#define    smmtcadd_   FC_GLOBAL(smmtcadd, SMMTCADD)
+#define    dmmtcadd_   FC_GLOBAL(dmmtcadd, DMMTCADD)
+#define    cmmtcadd_   FC_GLOBAL(cmmtcadd, CMMTCADD)
+#define    zmmtcadd_   FC_GLOBAL(zmmtcadd, ZMMTCADD)
 
-#if( _F2C_CALL_ == _F2C_UPCASE )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine called by a C routine with the following  FORTRAN to C inter-
-*  face:
-*
-*           FORTRAN DECLARATION            C CALL
-*           SUBROUTINE PDFOO(...)          PDFOO(...)
-*/
-#define    immadd_             IMMADD
-#define    smmadd_             SMMADD
-#define    dmmadd_             DMMADD
-#define    cmmadd_             CMMADD
-#define    zmmadd_             ZMMADD
+#define    immdda_     FC_GLOBAL(immdda, IMMDDA)
+#define    smmdda_     FC_GLOBAL(smmdda, SMMDDA)
+#define    dmmdda_     FC_GLOBAL(dmmdda, DMMDDA)
+#define    cmmdda_     FC_GLOBAL(cmmdda, CMMDDA)
+#define    zmmdda_     FC_GLOBAL(zmmdda, ZMMDDA)
 
-#define    immtadd_            IMMTADD
-#define    smmtadd_            SMMTADD
-#define    dmmtadd_            DMMTADD
-#define    cmmtadd_            CMMTADD
-#define    zmmtadd_            ZMMTADD
+#define    smmddac_    FC_GLOBAL(smmddac, SMMDDAC)
+#define    dmmddac_    FC_GLOBAL(dmmddac, DMMDDAC)
+#define    cmmddac_    FC_GLOBAL(cmmddac, CMMDDAC)
+#define    zmmddac_    FC_GLOBAL(zmmddac, ZMMDDAC)
 
-#define    smmcadd_            SMMCADD
-#define    dmmcadd_            DMMCADD
-#define    cmmcadd_            CMMCADD
-#define    zmmcadd_            ZMMCADD
+#define    immddat_    FC_GLOBAL(immddat, IMMDDAT)
+#define    smmddat_    FC_GLOBAL(smmddat, SMMDDAT)
+#define    dmmddat_    FC_GLOBAL(dmmddat, DMMDDAT)
+#define    cmmddat_    FC_GLOBAL(cmmddat, CMMDDAT)
+#define    zmmddat_    FC_GLOBAL(zmmddat, ZMMDDAT)
 
-#define    smmtcadd_           SMMTCADD
-#define    dmmtcadd_           DMMTCADD
-#define    cmmtcadd_           CMMTCADD
-#define    zmmtcadd_           ZMMTCADD
+#define    smmddact_   FC_GLOBAL(smmddact, SMMDDACT)
+#define    dmmddact_   FC_GLOBAL(dmmddact, DMMDDACT)
+#define    cmmddact_   FC_GLOBAL(cmmddact, CMMDDACT)
+#define    zmmddact_   FC_GLOBAL(zmmddact, ZMMDDACT)
 
-#define    immdda_             IMMDDA
-#define    smmdda_             SMMDDA
-#define    dmmdda_             DMMDDA
-#define    cmmdda_             CMMDDA
-#define    zmmdda_             ZMMDDA
+#define    sasqrtb_    FC_GLOBAL(sasqrtb, SASQRTB)
+#define    dasqrtb_    FC_GLOBAL(dasqrtb, DASQRTB)
 
-#define    smmddac_            SMMDDAC
-#define    dmmddac_            DMMDDAC
-#define    cmmddac_            CMMDDAC
-#define    zmmddac_            ZMMDDAC
+#define    sset_       FC_GLOBAL(sset, SSET)
+#define    dset_       FC_GLOBAL(dset, DSET)
+#define    cset_       FC_GLOBAL(cset, CSET)
+#define    zset_       FC_GLOBAL(zset, ZSET)
 
-#define    immddat_            IMMDDAT
-#define    smmddat_            SMMDDAT
-#define    dmmddat_            DMMDDAT
-#define    cmmddat_            CMMDDAT
-#define    zmmddat_            ZMMDDAT
+#define    svasum_     FC_GLOBAL(svasum, SVASUM)
+#define    dvasum_     FC_GLOBAL(dvasum, DVASUM)
+#define    scvasum_    FC_GLOBAL(scvasum, SCVASUM)
+#define    dzvasum_    FC_GLOBAL(dzvasum, DZVASUM)
 
-#define    smmddact_           SMMDDACT
-#define    dmmddact_           DMMDDACT
-#define    cmmddact_           CMMDDACT
-#define    zmmddact_           ZMMDDACT
+#define    sascal_     FC_GLOBAL(sascal, SASCAL)
+#define    dascal_     FC_GLOBAL(dascal, DASCAL)
 
-#define    sasqrtb_            SASQRTB
-#define    dasqrtb_            DASQRTB
+#define    scshft_     FC_GLOBAL(scshft, SCSHFT)
+#define    dcshft_     FC_GLOBAL(dcshft, DCSHFT)
+#define    ccshft_     FC_GLOBAL(ccshft, CCSHFT)
+#define    zcshft_     FC_GLOBAL(zcshft, ZCSHFT)
 
-#define    sset_               SSET
-#define    dset_               DSET
-#define    cset_               CSET
-#define    zset_               ZSET
+#define    srshft_     FC_GLOBAL(srshft, SRSHFT)
+#define    drshft_     FC_GLOBAL(drshft, DRSHFT)
+#define    crshft_     FC_GLOBAL(crshft, CRSHFT)
+#define    zrshft_     FC_GLOBAL(zrshft, ZRSHFT)
 
-#define    svasum_             SVASUM
-#define    dvasum_             DVASUM
-#define    scvasum_            SCVASUM
-#define    dzvasum_            DZVASUM
+#define    svvdot_     FC_GLOBAL(svvdot, SVVDOT)
+#define    dvvdot_     FC_GLOBAL(dvvdot, DVVDOT)
+#define    cvvdotc_    FC_GLOBAL(cvvdotc, CVVDOTC)
+#define    cvvdotu_    FC_GLOBAL(cvvdotu, CVVDOTU)
+#define    zvvdotc_    FC_GLOBAL(zvvdotc, ZVVDOTC)
+#define    zvvdotu_    FC_GLOBAL(zvvdotu, ZVVDOTU)
 
-#define    sascal_             SASCAL
-#define    dascal_             DASCAL
+#define    stzpad_     FC_GLOBAL(stzpad, STZPAD)
+#define    dtzpad_     FC_GLOBAL(dtzpad, DTZPAD)
+#define    ctzpad_     FC_GLOBAL(ctzpad, CTZPAD)
+#define    ztzpad_     FC_GLOBAL(ztzpad, ZTZPAD)
 
-#define    scshft_             SCSHFT
-#define    dcshft_             DCSHFT
-#define    ccshft_             CCSHFT
-#define    zcshft_             ZCSHFT
+#define    stzpadcpy_  FC_GLOBAL(stzpadcpy, STZPADCPY)
+#define    dtzpadcpy_  FC_GLOBAL(dtzpadcpy, DTZPADCPY)
+#define    ctzpadcpy_  FC_GLOBAL(ctzpadcpy, CTZPADCPY)
+#define    ztzpadcpy_  FC_GLOBAL(ztzpadcpy, ZTZPADCPY)
 
-#define    srshft_             SRSHFT
-#define    drshft_             DRSHFT
-#define    crshft_             CRSHFT
-#define    zrshft_             ZRSHFT
+#define    stzscal_    FC_GLOBAL(stzscal, STZSCAL)
+#define    dtzscal_    FC_GLOBAL(dtzscal, DTZSCAL)
+#define    ctzscal_    FC_GLOBAL(ctzscal, CTZSCAL)
+#define    ztzscal_    FC_GLOBAL(ztzscal, ZTZSCAL)
 
-#define    svvdot_             SVVDOT
-#define    dvvdot_             DVVDOT
-#define    cvvdotc_            CVVDOTC
-#define    cvvdotu_            CVVDOTU
-#define    zvvdotc_            ZVVDOTC
-#define    zvvdotu_            ZVVDOTU
+#define    chescal_    FC_GLOBAL(chescal, CHESCAL)
+#define    zhescal_    FC_GLOBAL(zhescal, ZHESCAL)
 
-#define    stzpad_             STZPAD
-#define    dtzpad_             DTZPAD
-#define    ctzpad_             CTZPAD
-#define    ztzpad_             ZTZPAD
+#define    ctzcnjg_    FC_GLOBAL(ctzcnjg, CTZCNJG)
+#define    ztzcnjg_    FC_GLOBAL(ztzcnjg, ZTZCNJG)
 
-#define    stzpadcpy_          STZPADCPY
-#define    dtzpadcpy_          DTZPADCPY
-#define    ctzpadcpy_          CTZPADCPY
-#define    ztzpadcpy_          ZTZPADCPY
+#define    sagemv_     FC_GLOBAL(sagemv, SAGEMV)
+#define    dagemv_     FC_GLOBAL(dagemv, DAGEMV)
+#define    cagemv_     FC_GLOBAL(cagemv, CAGEMV)
+#define    zagemv_     FC_GLOBAL(zagemv, ZAGEMV)
 
-#define    stzscal_            STZSCAL
-#define    dtzscal_            DTZSCAL
-#define    ctzscal_            CTZSCAL
-#define    ztzscal_            ZTZSCAL
+#define    sasymv_     FC_GLOBAL(sasymv, SASYMV)
+#define    dasymv_     FC_GLOBAL(dasymv, DASYMV)
+#define    casymv_     FC_GLOBAL(casymv, CASYMV)
+#define    zasymv_     FC_GLOBAL(zasymv, ZASYMV)
+#define    cahemv_     FC_GLOBAL(cahemv, CAHEMV)
+#define    zahemv_     FC_GLOBAL(zahemv, ZAHEMV)
 
-#define    chescal_            CHESCAL
-#define    zhescal_            ZHESCAL
+#define    satrmv_     FC_GLOBAL(satrmv, SATRMV)
+#define    datrmv_     FC_GLOBAL(datrmv, DATRMV)
+#define    catrmv_     FC_GLOBAL(catrmv, CATRMV)
+#define    zatrmv_     FC_GLOBAL(zatrmv, ZATRMV)
 
-#define    ctzcnjg_            CTZCNJG
-#define    ztzcnjg_            ZTZCNJG
+#define    csymv_      FC_GLOBAL(csymv, CSYMV)
+#define    zsymv_      FC_GLOBAL(zsymv, ZSYMV)
 
-#define    sagemv_             SAGEMV
-#define    dagemv_             DAGEMV
-#define    cagemv_             CAGEMV
-#define    zagemv_             ZAGEMV
+#define    csyr_       FC_GLOBAL(csyr, CSYR)
+#define    zsyr_       FC_GLOBAL(zsyr, ZSYR)
 
-#define    sasymv_             SASYMV
-#define    dasymv_             DASYMV
-#define    casymv_             CASYMV
-#define    zasymv_             ZASYMV
-#define    cahemv_             CAHEMV
-#define    zahemv_             ZAHEMV
+#define    csyr2_      FC_GLOBAL(csyr2, CSYR2)
+#define    zsyr2_      FC_GLOBAL(zsyr2, ZSYR2)
 
-#define    satrmv_             SATRMV
-#define    datrmv_             DATRMV
-#define    catrmv_             CATRMV
-#define    zatrmv_             ZATRMV
-
-#define    csymv_              CSYMV
-#define    zsymv_              ZSYMV
-
-#define    csyr_               CSYR
-#define    zsyr_               ZSYR
-
-#define    csyr2_              CSYR2
-#define    zsyr2_              ZSYR2
-
-#endif
-
-#if( _F2C_CALL_ == _F2C_NOCHANGE )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine called by a C routine with the following  FORTRAN to C inter-
-*  face:
-*
-*           FORTRAN DECLARATION            C CALL
-*           SUBROUTINE PDFOO(...)          pdfoo(...)
-*/
-#define    immadd_             immadd
-#define    smmadd_             smmadd
-#define    dmmadd_             dmmadd
-#define    cmmadd_             cmmadd
-#define    zmmadd_             zmmadd
-
-#define    immtadd_            immtadd
-#define    smmtadd_            smmtadd
-#define    dmmtadd_            dmmtadd
-#define    cmmtadd_            cmmtadd
-#define    zmmtadd_            zmmtadd
-
-#define    smmcadd_            smmcadd
-#define    dmmcadd_            dmmcadd
-#define    cmmcadd_            cmmcadd
-#define    zmmcadd_            zmmcadd
-
-#define    smmtcadd_           smmtcadd
-#define    dmmtcadd_           dmmtcadd
-#define    cmmtcadd_           cmmtcadd
-#define    zmmtcadd_           zmmtcadd
-
-#define    immdda_             immdda
-#define    smmdda_             smmdda
-#define    dmmdda_             dmmdda
-#define    cmmdda_             cmmdda
-#define    zmmdda_             zmmdda
-
-#define    smmddac_            smmddac
-#define    dmmddac_            dmmddac
-#define    cmmddac_            cmmddac
-#define    zmmddac_            zmmddac
-
-#define    immddat_            immddat
-#define    smmddat_            smmddat
-#define    dmmddat_            dmmddat
-#define    cmmddat_            cmmddat
-#define    zmmddat_            zmmddat
-
-#define    smmddact_           smmddact
-#define    dmmddact_           dmmddact
-#define    cmmddact_           cmmddact
-#define    zmmddact_           zmmddact
-
-#define    sasqrtb_            sasqrtb
-#define    dasqrtb_            dasqrtb
-
-#define    sset_               sset
-#define    dset_               dset
-#define    cset_               cset
-#define    zset_               zset
-
-#define    svasum_             svasum
-#define    dvasum_             dvasum
-#define    scvasum_            scvasum
-#define    dzvasum_            dzvasum
-
-#define    sascal_             sascal
-#define    dascal_             dascal
-
-#define    scshft_             scshft
-#define    dcshft_             dcshft
-#define    ccshft_             ccshft
-#define    zcshft_             zcshft
-
-#define    srshft_             srshft
-#define    drshft_             drshft
-#define    crshft_             crshft
-#define    zrshft_             zrshft
-
-#define    svvdot_             svvdot
-#define    dvvdot_             dvvdot
-#define    cvvdotc_            cvvdotc
-#define    cvvdotu_            cvvdotu
-#define    zvvdotc_            zvvdotc
-#define    zvvdotu_            zvvdotu
-
-#define    stzpad_             stzpad
-#define    dtzpad_             dtzpad
-#define    ctzpad_             ctzpad
-#define    ztzpad_             ztzpad
-
-#define    stzpadcpy_          stzpadcpy
-#define    dtzpadcpy_          dtzpadcpy
-#define    ctzpadcpy_          ctzpadcpy
-#define    ztzpadcpy_          ztzpadcpy
-
-#define    stzscal_            stzscal
-#define    dtzscal_            dtzscal
-#define    ctzscal_            ctzscal
-#define    ztzscal_            ztzscal
-
-#define    chescal_            chescal
-#define    zhescal_            zhescal
-
-#define    ctzcnjg_            ctzcnjg
-#define    ztzcnjg_            ztzcnjg
-
-#define    sagemv_             sagemv
-#define    dagemv_             dagemv
-#define    cagemv_             cagemv
-#define    zagemv_             zagemv
-
-#define    sasymv_             sasymv
-#define    dasymv_             dasymv
-#define    casymv_             casymv
-#define    zasymv_             zasymv
-#define    cahemv_             cahemv
-#define    zahemv_             zahemv
-
-#define    satrmv_             satrmv
-#define    datrmv_             datrmv
-#define    catrmv_             catrmv
-#define    zatrmv_             zatrmv
-
-#define    csymv_              csymv
-#define    zsymv_              zsymv
-
-#define    csyr_               csyr
-#define    zsyr_               zsyr
-
-#define    csyr2_              csyr2
-#define    zsyr2_              zsyr2
-
-#endif
 /*
 *  ---------------------------------------------------------------------
 *  Function prototypes

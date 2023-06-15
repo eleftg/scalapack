@@ -1,5 +1,4 @@
 #ifdef BTCINTFACE
-#include "Cbt.h"
 
 void blacs_gridinit_(Int *ConTxt, char *order, Int *nprow, Int *npcol)
 {

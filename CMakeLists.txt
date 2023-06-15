@@ -9,79 +9,22 @@ configure_file(
   COPYONLY
 )
 
-# Add the CMake directory for custon CMake modules
-set(CMAKE_MODULE_PATH "${SCALAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
+# Add the CMake directory for custom CMake modules
+list(PREPEND CMAKE_MODULE_PATH ${SCALAPACK_SOURCE_DIR}/CMAKE)
 
-if (UNIX)
-   if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "Intel")
-      set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
-   endif ()
-endif ()
+if(UNIX AND CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
+endif()
 
 #
 #   MPI
 #
-#set(MPI_BASE_DIR "/Users/julie/opt/openmpi/" CACHE PATH "MPI Path")
-#set(MPI_BASE_DIR "/Users/julie/opt/mpich2/" CACHE PATH "MPI Path")
-set(CMAKE_PREFIX_PATH "${MPI_BASE_DIR};${CMAKE_PREFIX_PATH}")
-#set(MPI_COMPILER ${MPI_BASE_DIR}/bin/mpicc)
+find_package(MPI REQUIRED COMPONENTS C Fortran)
 
-find_package(MPI)
-if (MPI_FOUND)
-   message(STATUS "Found MPI_LIBRARY : ${MPI_FOUND} ")
-   INCLUDE_DIRECTORIES(${MPI_INCLUDE_PATH})
-
-   find_program(MPI_C_COMPILER
-      NAMES mpicc
-      HINTS "${MPI_BASE_DIR}"
-      PATH_SUFFIXES bin
-      DOC "MPI C compiler.")
-   MARK_AS_ADVANCED(MPI_C_COMPILER)
-   if ("${MPI_C_COMPILER}" STREQUAL "MPI_C_COMPILER-NOTFOUND")
-      message(ERROR "--> MPI C Compiler NOT FOUND (please set MPI_BASE_DIR accordingly")
-   else()
-      message(STATUS "--> MPI C Compiler : ${MPI_C_COMPILER}")
-      SET(CMAKE_C_COMPILER "${MPI_C_COMPILER}")
-      message(STATUS "--> C Compiler : ${CMAKE_C_COMPILER}")
-   endif()
-   find_program(MPI_Fortran_COMPILER
-      NAMES mpif77
-      HINTS "${MPI_BASE_DIR}"
-      PATH_SUFFIXES bin
-      DOC "MPI Fortran compiler.")
-   MARK_AS_ADVANCED(MPI_Fortran_COMPILER)
-
-
-
-   if ("${MPI_Fortran_COMPILER}" STREQUAL "MPI_Fortran_COMPILER-NOTFOUND")
-      message(ERROR "--> MPI Fortran Compiler NOT FOUND (please set MPI_BASE_DIR accordingly")
-   else()
-      message(STATUS "--> MPI Fortran Compiler : ${MPI_Fortran_COMPILER}")
-      SET(Fortran_COMPILER "${CMAKE_Fortran_COMPILER}")
-      #SET(CMAKE_Fortran_COMPILER "${MPI_Fortran_COMPILER}")
-      message(STATUS "--> Fortran Compiler : ${CMAKE_Fortran_COMPILER}")
-   endif()
-
-else()
-   message(STATUS "Found MPI_LIBRARY : ${MPI_FOUND} ")
-   set(MPI_BASE_DIR ${MPI_BASE_DIR} CACHE PATH "MPI Path")
-   UNSET(MPIEXEC CACHE)
-   UNSET(MPIEXEC_POSTFLAGS CACHE)
-   UNSET(MPIEXEC_PREFLAGS CACHE)
-   UNSET(MPIEXEC_MAX_NUMPROCS CACHE)
-   UNSET(MPIEXEC_NUMPROC_FLAG CACHE)
-   UNSET(MPI_COMPILE_FLAGS CACHE)
-   UNSET(MPI_LINK_FLAGS CACHE)
-   UNSET(MPI_INCLUDE_PATH CACHE)
-   message(FATAL_ERROR "--> MPI Library NOT FOUND -- please set MPI_BASE_DIR accordingly --")
-endif()
-
-
-if (UNIX)
-   if ("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "Intel")
-      set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
-   endif ()
-endif ()
+message(STATUS "--> MPI C Compiler : ${MPI_C_COMPILER}")
+message(STATUS "--> C Compiler : ${CMAKE_C_COMPILER}")
+message(STATUS "--> MPI Fortran Compiler : ${MPI_Fortran_COMPILER}")
+message(STATUS "--> Fortran Compiler : ${CMAKE_Fortran_COMPILER}")
 
 macro(SCALAPACK_install_library lib)
   install(TARGETS ${lib} EXPORT scalapack-targets
@@ -93,11 +36,9 @@ endmacro()
 
 # --------------------------------------------------
 # Testing
-SET(DART_TESTING_TIMEOUT 600)
+set(DART_TESTING_TIMEOUT 600)
 
-enable_testing()
 include(CTest)
-enable_testing()
 # --------------------------------------------------
 
 # Organize output files.  On Windows this also keeps .dll files next
@@ -120,17 +61,23 @@ set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 #
 #   Fortran Mangling, MPI Tests and BLACS settings
 #
-include(FortranMangling)
-COMPILE(install_COMPILED)
+# automatically detect the API by which C and Fortran languages interact
+# (symbols' mangling etc)
+include(FortranCInterface)
 
-FORTRAN_MANGLING(CDEFS)
-#MESSAGE(STATUS "Setting CDEFS = ${CDEFS}")
-#set(CDEFS ${CDEFS} CACHE STRING "Fortran Mangling" FORCE)
-MESSAGE(STATUS "=========")
+# verify that the Fortran and C/C++ compilers work together.
+# It tests whether a simple test executable using Fortran and C
+# compiles and links successfully
+FortranCInterface_VERIFY()
 
-# --------------------------------------------------
-# Compiler Flags
-ADD_DEFINITIONS( "-D${CDEFS}")
+# generate a C header file containing macros to mangle symbol names
+# This header will become part of the public API so its location
+# should match that of its final installation path
+FortranCInterface_HEADER(
+    ${CMAKE_BINARY_DIR}/FCMangle.h
+    MACRO_NAMESPACE FC_
+)
+message(STATUS "=========")
 
 # --------------------------------------------------
 # ScaLAPACK needs BLAS and LAPACK
@@ -139,22 +86,22 @@ option(USE_OPTIMIZED_LAPACK_BLAS "Whether or not to search for optimized LAPACK 
 
 message(STATUS "CHECKING BLAS AND LAPACK LIBRARIES")
 
-IF(LAPACK_LIBRARIES)
+if(LAPACK_LIBRARIES)
   include(CheckFortranFunctionExists)
   message(STATUS "--> LAPACK supplied by user is ${LAPACK_LIBRARIES}.")
   set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
-  CHECK_FORTRAN_FUNCTION_EXISTS("dgesv" LAPACK_FOUND)
+  check_fortran_function_exists("dgesv" LAPACK_FOUND)
   unset( CMAKE_REQUIRED_LIBRARIES )
   message(STATUS "--> LAPACK routine dgesv is found: ${LAPACK_FOUND}.")
-ENDIF()
+endif()
 
 if(LAPACK_FOUND)
       message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
-else(LAPACK_FOUND)
+else()
    if(USE_OPTIMIZED_LAPACK_BLAS)
       message(STATUS "--> Searching for optimized LAPACK and BLAS libraries on your machine.")
       find_package(LAPACK)
-   ENDIF(USE_OPTIMIZED_LAPACK_BLAS)
+   endif()
    if(NOT LAPACK_FOUND)
       message(STATUS "--> LAPACK and BLAS were not found. Reference LAPACK and BLAS will be downloaded and installed")
       include(ExternalProject)
@@ -164,25 +111,20 @@ else(LAPACK_FOUND)
 		CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${SCALAPACK_BINARY_DIR}
         PREFIX ${SCALAPACK_BINARY_DIR}/dependencies
       )
-	  if (UNIX)
-         SET(LAPACK_LIBRARIES ${SCALAPACK_BINARY_DIR}/lib/liblapack.a CACHE STRING "LAPACK library" FORCE)
-         SET(BLAS_LIBRARIES ${SCALAPACK_BINARY_DIR}/lib/libblas.a CACHE STRING "BLAS library" FORCE)
-	  else (UNIX) # On Windows
-         SET(LAPACK_LIBRARIES ${SCALAPACK_BINARY_DIR}/lib/liblapack.lib CACHE STRING "LAPACK library" FORCE)
-         SET(BLAS_LIBRARIES ${SCALAPACK_BINARY_DIR}/lib/libblas.lib CACHE STRING "BLAS library" FORCE)
-      endif (UNIX)
-   ENDIF()
-ENDIF()
+	  if(UNIX)
+         set(LAPACK_LIBRARIES ${SCALAPACK_BINARY_DIR}/lib/liblapack.a CACHE STRING "LAPACK library" FORCE)
+         set(BLAS_LIBRARIES ${SCALAPACK_BINARY_DIR}/lib/libblas.a CACHE STRING "BLAS library" FORCE)
+	  else() # On Windows
+         set(LAPACK_LIBRARIES ${SCALAPACK_BINARY_DIR}/lib/liblapack.lib CACHE STRING "LAPACK library" FORCE)
+         set(BLAS_LIBRARIES ${SCALAPACK_BINARY_DIR}/lib/libblas.lib CACHE STRING "BLAS library" FORCE)
+      endif()
+   endif()
+endif()
 
 message(STATUS "BLAS library: ${BLAS_LIBRARIES}")
 message(STATUS "LAPACK library: ${LAPACK_LIBRARIES}")
 
-MESSAGE(STATUS "=========")
-
-# --------------------------------------------------
-# By default static library
-OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF )
-OPTION(BUILD_STATIC_LIBS "Build static libraries" ON )
+message(STATUS "=========")
 
 # --------------------------------------------------
 # Subdirectories that need to be processed
@@ -232,28 +174,35 @@ add_subdirectory(SRC)
 append_subdir_files(src "SRC")
 append_subdir_files(src-C "SRC")
 
-if (UNIX)
+if(UNIX)
    add_library(scalapack ${blacs} ${tools} ${tools-C} ${extra_lapack} ${pblas} ${pblas-F} ${ptzblas} ${ptools} ${pbblas} ${redist} ${src} ${src-C})
    set_target_properties(scalapack PROPERTIES
     VERSION ${SCALAPACK_VERSION}
     SOVERSION ${SCALAPACK_VERSION_MAJOR}.${SCALAPACK_VERSION_MINOR})
-   target_link_libraries( scalapack ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+   target_link_libraries( scalapack ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES} MPI::MPI_C)
    scalapack_install_library(scalapack)
-else (UNIX) # Need to separate Fortran and C Code
-   OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
+else() # Need to separate Fortran and C Code
    add_library(scalapack ${blacs} ${tools-C} ${pblas} ${ptools} ${redist} ${src-C})
    set_target_properties(scalapack PROPERTIES
     VERSION ${SCALAPACK_VERSION}
     SOVERSION ${SCALAPACK_VERSION_MAJOR}.${SCALAPACK_VERSION_MINOR})
-   target_link_libraries( scalapack ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+   target_link_libraries( scalapack ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES} MPI::MPI_C)
    add_library(scalapack-F ${pblas-F} ${pbblas} ${ptzblas} ${tools} ${src} ${extra_lapack} )
    set_target_properties(scalapack-F PROPERTIES
     VERSION ${SCALAPACK_VERSION}
     SOVERSION ${SCALAPACK_VERSION_MAJOR}.${SCALAPACK_VERSION_MINOR})
-   target_link_libraries( scalapack-F ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+   target_link_libraries( scalapack-F ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES}  MPI::MPI_Fortran)
    scalapack_install_library(scalapack)
    scalapack_install_library(scalapack-F)
-endif (UNIX)
+endif()
+
+foreach(tgt scalapack scalapack-F)
+    if(TARGET ${tgt})
+        target_include_directories(${tgt} PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+        )
+    endif()
+endforeach()
 
 option(SCALAPACK_BUILD_TESTS "Build all tests of the ScaLAPACK library" ON)
 if(${SCALAPACK_BUILD_TESTS})
@@ -263,29 +212,29 @@ endif()
 # --------------------------------------------------
 # CPACK Packaging
 
-SET(CPACK_PACKAGE_NAME "ScaLAPACK")
-SET(CPACK_PACKAGE_VENDOR "University of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd")
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ScaLAPACK- Linear Algebra Package")
+set(CPACK_PACKAGE_NAME "ScaLAPACK")
+set(CPACK_PACKAGE_VENDOR "University of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ScaLAPACK- Linear Algebra Package")
 set(CPACK_PACKAGE_VERSION_MAJOR ${SCALAPACK_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${SCALAPACK_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${SCALAPACK_VERSION_PATCH})
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "SCALAPACK")
-IF(WIN32 AND NOT UNIX)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "SCALAPACK")
+if(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
   # sure there is at least one set of four (4) backlasshes.
-  SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\http://icl.cs.utk.edu/lapack-forum")
-  SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.netlib.org/scalapack")
-  SET(CPACK_NSIS_CONTACT "scalapack@eecs.utk.edu")
-  SET(CPACK_NSIS_MODIFY_PATH ON)
-  SET(CPACK_NSIS_DISPLAY_NAME "SCALAPACK-${SCALAPACK_VERSION}")
+  set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\http://icl.cs.utk.edu/lapack-forum")
+  set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.netlib.org/scalapack")
+  set(CPACK_NSIS_CONTACT "scalapack@eecs.utk.edu")
+  set(CPACK_NSIS_MODIFY_PATH ON)
+  set(CPACK_NSIS_DISPLAY_NAME "SCALAPACK-${SCALAPACK_VERSION}")
   set(CPACK_PACKAGE_RELOCATABLE "true")
-ELSE(WIN32 AND NOT UNIX)
-  SET(CPACK_GENERATOR "TGZ")
-  SET(CPACK_SOURCE_GENERATOR TGZ)
-  SET(CPACK_SOURCE_PACKAGE_FILE_NAME "scalapack-${SCALAPACK_VERSION}" )
-  SET(CPACK_SOURCE_IGNORE_FILES ~$ .svn ${CPACK_SOURCE_IGNORE_FILES} )
-ENDIF(WIN32 AND NOT UNIX)
+else()
+  set(CPACK_GENERATOR "TGZ")
+  set(CPACK_SOURCE_GENERATOR TGZ)
+  set(CPACK_SOURCE_PACKAGE_FILE_NAME "scalapack-${SCALAPACK_VERSION}" )
+  set(CPACK_SOURCE_IGNORE_FILES ~$ .svn ${CPACK_SOURCE_IGNORE_FILES} )
+endif()
 INCLUDE(CPack)
 
 
@@ -299,7 +248,7 @@ if( NOT LAPACK_FOUND )
   ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES}
   DESTINATION lib
    )
-endif( NOT LAPACK_FOUND )
+endif()
 
 configure_file(${SCALAPACK_SOURCE_DIR}/CMAKE/scalapack-config-version.cmake.in
   ${SCALAPACK_BINARY_DIR}/scalapack-config-version.cmake @ONLY)

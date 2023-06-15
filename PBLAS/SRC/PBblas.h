@@ -15,6 +15,8 @@
 *  #define macro constants
 *  ---------------------------------------------------------------------
 */
+#include <FCMangle.h>
+
 #define    CNOTRAN             'N'
 #define    CNOCONJG            'N'
 #define    CTRAN               'T'
@@ -67,280 +69,126 @@
 #define    REUSE               "R"
 #define    ALLOCATE            "A"
 
-#if( _F2C_CALL_ == _F2C_ADD_ )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine called by a C routine. No redefinition is necessary  to  have
-*  the following FORTRAN to C interface:
-*
-*           FORTRAN DECLARATION            C CALL
-*           SUBROUTINE DGEMM(...)          dgemm_(...)
-*
-*  This is the PBLAS default.
-*/
-#endif
+#define    srot_        FC_GLOBAL(srot, SROT)
+#define    drot_        FC_GLOBAL(drot, DROT)
 
-#if( _F2C_CALL_ == _F2C_UPCASE )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine called by a C routine with the following  FORTRAN to C inter-
-*  face:
-*
-*           FORTRAN DECLARATION            C CALL
-*           SUBROUTINE DGEMM(...)          DGEMM(...)
-*/
-#define    srot_               SROT
-#define    drot_               DROT
+#define    sswap_       FC_GLOBAL(sswap, SSWAP)
+#define    dswap_       FC_GLOBAL(dswap, DSWAP)
+#define    cswap_       FC_GLOBAL(cswap, CSWAP)
+#define    zswap_       FC_GLOBAL(zswap, ZSWAP)
 
-#define    sswap_              SSWAP
-#define    dswap_              DSWAP
-#define    cswap_              CSWAP
-#define    zswap_              ZSWAP
+#define    scopy_       FC_GLOBAL(scopy, SCOPY)
+#define    dcopy_       FC_GLOBAL(dcopy, DCOPY)
+#define    ccopy_       FC_GLOBAL(ccopy, CCOPY)
+#define    zcopy_       FC_GLOBAL(zcopy, ZCOPY)
 
-#define    scopy_              SCOPY
-#define    dcopy_              DCOPY
-#define    ccopy_              CCOPY
-#define    zcopy_              ZCOPY
+#define    saxpy_       FC_GLOBAL(saxpy, SAXPY)
+#define    daxpy_       FC_GLOBAL(daxpy, DAXPY)
+#define    caxpy_       FC_GLOBAL(caxpy, CAXPY)
+#define    zaxpy_       FC_GLOBAL(zaxpy, ZAXPY)
 
-#define    saxpy_              SAXPY
-#define    daxpy_              DAXPY
-#define    caxpy_              CAXPY
-#define    zaxpy_              ZAXPY
+#define    sscal_       FC_GLOBAL(sscal, SSCAL)
+#define    dscal_       FC_GLOBAL(dscal, DSCAL)
+#define    cscal_       FC_GLOBAL(cscal, CSCAL)
+#define    zscal_       FC_GLOBAL(zscal, ZSCAL)
+#define    csscal_      FC_GLOBAL(csscal, CSSCAL)
+#define    zdscal_      FC_GLOBAL(zdscal, ZDSCAL)
 
-#define    sscal_              SSCAL
-#define    dscal_              DSCAL
-#define    cscal_              CSCAL
-#define    zscal_              ZSCAL
-#define    csscal_             CSSCAL
-#define    zdscal_             ZDSCAL
+#define    sasum_       FC_GLOBAL(sasum, SASUM)
+#define    dasum_       FC_GLOBAL(dasum, DASUM)
+#define    scasum_      FC_GLOBAL(scasum, SCASUM)
+#define    dzasum_      FC_GLOBAL(dzasum, DZASUM)
 
-#define    sasum_              SASUM
-#define    dasum_              DASUM
-#define    scasum_             SCASUM
-#define    dzasum_             DZASUM
+#define    snrm2_       FC_GLOBAL(snrm2, SNRM2)
+#define    dnrm2_       FC_GLOBAL(dnrm2, DNRM2)
+#define    scnrm2_      FC_GLOBAL(scnrm2, SCNRM2)
+#define    dznrm2_      FC_GLOBAL(dznrm2, DZNRM2)
 
-#define    snrm2_              SNRM2
-#define    dnrm2_              DNRM2
-#define    scnrm2_             SCNRM2
-#define    dznrm2_             DZNRM2
+#define    sdot_        FC_GLOBAL(sdot, SDOT)
+#define    ddot_        FC_GLOBAL(ddot, DDOT)
+#define    cdotu_       FC_GLOBAL(cdotu, CDOTU)
+#define    zdotu_       FC_GLOBAL(zdotu, ZDOTU)
+#define    cdotc_       FC_GLOBAL(cdotc, CDOTC)
+#define    zdotc_       FC_GLOBAL(zdotc, ZDOTC)
 
-#define    sdot_               SDOT
-#define    ddot_               DDOT
-#define    cdotu_              CDOTU
-#define    zdotu_              ZDOTU
-#define    cdotc_              CDOTC
-#define    zdotc_              ZDOTC
+#define    isamax_      FC_GLOBAL(isamax, ISAMAX)
+#define    idamax_      FC_GLOBAL(idamax, IDAMAX)
+#define    icamax_      FC_GLOBAL(icamax, ICAMAX)
+#define    izamax_      FC_GLOBAL(izamax, IZAMAX)
 
-#define    isamax_             ISAMAX
-#define    idamax_             IDAMAX
-#define    icamax_             ICAMAX
-#define    izamax_             IZAMAX
+#define    sgemv_       FC_GLOBAL(sgemv, SGEMV)
+#define    dgemv_       FC_GLOBAL(dgemv, DGEMV)
+#define    cgemv_       FC_GLOBAL(cgemv, CGEMV)
+#define    zgemv_       FC_GLOBAL(zgemv, ZGEMV)
 
-#define    sgemv_              SGEMV
-#define    dgemv_              DGEMV
-#define    cgemv_              CGEMV
-#define    zgemv_              ZGEMV
+#define    ssymv_       FC_GLOBAL(ssymv, SSYMV)
+#define    dsymv_       FC_GLOBAL(dsymv, DSYMV)
+#define    chemv_       FC_GLOBAL(chemv, CHEMV)
+#define    zhemv_       FC_GLOBAL(zhemv, ZHEMV)
 
-#define    ssymv_              SSYMV
-#define    dsymv_              DSYMV
-#define    chemv_              CHEMV
-#define    zhemv_              ZHEMV
+#define    strmv_       FC_GLOBAL(strmv, STRMV)
+#define    dtrmv_       FC_GLOBAL(dtrmv, DTRMV)
+#define    ctrmv_       FC_GLOBAL(ctrmv, CTRMV)
+#define    ztrmv_       FC_GLOBAL(ztrmv, ZTRMV)
 
-#define    strmv_              STRMV
-#define    dtrmv_              DTRMV
-#define    ctrmv_              CTRMV
-#define    ztrmv_              ZTRMV
+#define    strsv_       FC_GLOBAL(strsv, STRSV)
+#define    dtrsv_       FC_GLOBAL(dtrsv, DTRSV)
+#define    ctrsv_       FC_GLOBAL(ctrsv, CTRSV)
+#define    ztrsv_       FC_GLOBAL(ztrsv, ZTRSV)
 
-#define    strsv_              STRSV
-#define    dtrsv_              DTRSV
-#define    ctrsv_              CTRSV
-#define    ztrsv_              ZTRSV
+#define    sger_        FC_GLOBAL(sger, SGER)
+#define    dger_        FC_GLOBAL(dger, DGER)
+#define    cgeru_       FC_GLOBAL(cgeru, CGERU)
+#define    zgeru_       FC_GLOBAL(zgeru, ZGERU)
+#define    cgerc_       FC_GLOBAL(cgerc, CGERC)
+#define    zgerc_       FC_GLOBAL(zgerc, ZGERC)
 
-#define    sger_               SGER
-#define    dger_               DGER
-#define    cgeru_              CGERU
-#define    zgeru_              ZGERU
-#define    cgerc_              CGERC
-#define    zgerc_              ZGERC
+#define    ssyr_        FC_GLOBAL(ssyr, SSYR)
+#define    dsyr_        FC_GLOBAL(dsyr, DSYR)
+#define    cher_        FC_GLOBAL(cher, CHER)
+#define    zher_        FC_GLOBAL(zher, ZHER)
 
-#define    ssyr_               SSYR
-#define    dsyr_               DSYR
-#define    cher_               CHER
-#define    zher_               ZHER
+#define    ssyr2_       FC_GLOBAL(ssyr2, SSYR2)
+#define    dsyr2_       FC_GLOBAL(dsyr2, DSYR2)
+#define    cher2_       FC_GLOBAL(cher2, CHER2)
+#define    zher2_       FC_GLOBAL(zher2, ZHER2)
 
-#define    ssyr2_              SSYR2
-#define    dsyr2_              DSYR2
-#define    cher2_              CHER2
-#define    zher2_              ZHER2
+#define    sgemm_       FC_GLOBAL(sgemm, SGEMM)
+#define    dgemm_       FC_GLOBAL(dgemm, DGEMM)
+#define    cgemm_       FC_GLOBAL(cgemm, CGEMM)
+#define    zgemm_       FC_GLOBAL(zgemm, ZGEMM)
 
-#define    sgemm_              SGEMM
-#define    dgemm_              DGEMM
-#define    cgemm_              CGEMM
-#define    zgemm_              ZGEMM
+#define    ssymm_       FC_GLOBAL(ssymm, SSYMM)
+#define    dsymm_       FC_GLOBAL(dsymm, DSYMM)
+#define    csymm_       FC_GLOBAL(csymm, CSYMM)
+#define    chemm_       FC_GLOBAL(chemm, CHEMM)
+#define    zsymm_       FC_GLOBAL(zsymm, ZSYMM)
+#define    zhemm_       FC_GLOBAL(zhemm, ZHEMM)
 
-#define    ssymm_              SSYMM
-#define    dsymm_              DSYMM
-#define    csymm_              CSYMM
-#define    chemm_              CHEMM
-#define    zsymm_              ZSYMM
-#define    zhemm_              ZHEMM
+#define    strmm_       FC_GLOBAL(strmm, STRMM)
+#define    dtrmm_       FC_GLOBAL(dtrmm, DTRMM)
+#define    ctrmm_       FC_GLOBAL(ctrmm, CTRMM)
+#define    ztrmm_       FC_GLOBAL(ztrmm, ZTRMM)
 
-#define    strmm_              STRMM
-#define    dtrmm_              DTRMM
-#define    ctrmm_              CTRMM
-#define    ztrmm_              ZTRMM
+#define    strsm_       FC_GLOBAL(strsm, STRSM)
+#define    dtrsm_       FC_GLOBAL(dtrsm, DTRSM)
+#define    ctrsm_       FC_GLOBAL(ctrsm, CTRSM)
+#define    ztrsm_       FC_GLOBAL(ztrsm, ZTRSM)
 
-#define    strsm_              STRSM
-#define    dtrsm_              DTRSM
-#define    ctrsm_              CTRSM
-#define    ztrsm_              ZTRSM
+#define    ssyrk_       FC_GLOBAL(ssyrk, SSYRK)
+#define    dsyrk_       FC_GLOBAL(dsyrk, DSYRK)
+#define    csyrk_       FC_GLOBAL(csyrk, CSYRK)
+#define    cherk_       FC_GLOBAL(cherk, CHERK)
+#define    zsyrk_       FC_GLOBAL(zsyrk, ZSYRK)
+#define    zherk_       FC_GLOBAL(zherk, ZHERK)
 
-#define    ssyrk_              SSYRK
-#define    dsyrk_              DSYRK
-#define    csyrk_              CSYRK
-#define    cherk_              CHERK
-#define    zsyrk_              ZSYRK
-#define    zherk_              ZHERK
+#define    ssyr2k_      FC_GLOBAL(ssyr2k, SSYR2K)
+#define    dsyr2k_      FC_GLOBAL(dsyr2k, DSYR2K)
+#define    csyr2k_      FC_GLOBAL(csyr2k, CSYR2K)
+#define    cher2k_      FC_GLOBAL(cher2k, CHER2K)
+#define    zsyr2k_      FC_GLOBAL(zsyr2k, ZSYR2K)
+#define    zher2k_      FC_GLOBAL(zher2k, ZHER2K)
 
-#define    ssyr2k_             SSYR2K
-#define    dsyr2k_             DSYR2K
-#define    csyr2k_             CSYR2K
-#define    cher2k_             CHER2K
-#define    zsyr2k_             ZSYR2K
-#define    zher2k_             ZHER2K
-
-#endif
-
-#if( _F2C_CALL_ == _F2C_NOCHANGE )
-/*
-*  These defines  set  up  the  naming scheme required to have a FORTRAN
-*  routine called by a C routine with the following  FORTRAN to C inter-
-*  face:
-*
-*           FORTRAN DECLARATION            C CALL
-*           SUBROUTINE DGEMM(...)          dgemm(...)
-*/
-#define    srot_               srot
-#define    drot_               drot
-
-#define    sswap_              sswap
-#define    dswap_              dswap
-#define    cswap_              cswap
-#define    zswap_              zswap
-
-#define    scopy_              scopy
-#define    dcopy_              dcopy
-#define    ccopy_              ccopy
-#define    zcopy_              zcopy
-
-#define    saxpy_              saxpy
-#define    daxpy_              daxpy
-#define    caxpy_              caxpy
-#define    zaxpy_              zaxpy
-
-#define    sscal_              sscal
-#define    dscal_              dscal
-#define    cscal_              cscal
-#define    zscal_              zscal
-#define    csscal_             csscal
-#define    zdscal_             zdscal
-
-#define    sasum_              sasum
-#define    dasum_              dasum
-#define    scasum_             scasum
-#define    dzasum_             dzasum
-
-#define    snrm2_              snrm2
-#define    dnrm2_              dnrm2
-#define    scnrm2_             scnrm2
-#define    dznrm2_             dznrm2
-
-#define    sdot_               sdot
-#define    ddot_               ddot
-#define    cdotu_              cdotu
-#define    zdotu_              zdotu
-#define    cdotc_              cdotc
-#define    zdotc_              zdotc
-
-#define    isamax_             isamax
-#define    idamax_             idamax
-#define    icamax_             icamax
-#define    izamax_             izamax
-
-#define    sgemv_              sgemv
-#define    dgemv_              dgemv
-#define    cgemv_              cgemv
-#define    zgemv_              zgemv
-
-#define    ssymv_              ssymv
-#define    dsymv_              dsymv
-#define    chemv_              chemv
-#define    zhemv_              zhemv
-
-#define    strmv_              strmv
-#define    dtrmv_              dtrmv
-#define    ctrmv_              ctrmv
-#define    ztrmv_              ztrmv
-
-#define    strsv_              strsv
-#define    dtrsv_              dtrsv
-#define    ctrsv_              ctrsv
-#define    ztrsv_              ztrsv
-
-#define    sger_               sger
-#define    dger_               dger
-#define    cgeru_              cgeru
-#define    zgeru_              zgeru
-#define    cgerc_              cgerc
-#define    zgerc_              zgerc
-
-#define    ssyr_               ssyr
-#define    dsyr_               dsyr
-#define    cher_               cher
-#define    zher_               zher
-
-#define    ssyr2_              ssyr2
-#define    dsyr2_              dsyr2
-#define    cher2_              cher2
-#define    zher2_              zher2
-
-#define    sgemm_              sgemm
-#define    dgemm_              dgemm
-#define    cgemm_              cgemm
-#define    zgemm_              zgemm
-
-#define    ssymm_              ssymm
-#define    dsymm_              dsymm
-#define    csymm_              csymm
-#define    chemm_              chemm
-#define    zsymm_              zsymm
-#define    zhemm_              zhemm
-
-#define    strmm_              strmm
-#define    dtrmm_              dtrmm
-#define    ctrmm_              ctrmm
-#define    ztrmm_              ztrmm
-
-#define    strsm_              strsm
-#define    dtrsm_              dtrsm
-#define    ctrsm_              ctrsm
-#define    ztrsm_              ztrsm
-
-#define    ssyrk_              ssyrk
-#define    dsyrk_              dsyrk
-#define    csyrk_              csyrk
-#define    cherk_              cherk
-#define    zsyrk_              zsyrk
-#define    zherk_              zherk
-
-#define    ssyr2k_             ssyr2k
-#define    dsyr2k_             dsyr2k
-#define    csyr2k_             csyr2k
-#define    cher2k_             cher2k
-#define    zsyr2k_             zsyr2k
-#define    zher2k_             zher2k
-
-#endif
 /*
 *  ---------------------------------------------------------------------
 *  Function prototypes

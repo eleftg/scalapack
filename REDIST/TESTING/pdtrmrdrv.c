@@ -1,78 +1,71 @@
+#include <FCMangle.h>
 #include "redist.h"
 /* $Id: pdtrmrdrv.c,v 1.1.1.1 2000/02/15 18:04:11 susan Exp $
- * 
+ *
  * pdtrmrdrv.c :
- * 
- * 
+ *
+ *
  * PURPOSE:
- * 
+ *
  * this driver is testing the PDTRMR2D routine. It calls it to obtain a new
  * scattered block data decomposition of a distributed DOUBLE PRECISION
  * (block scattered) matrix. Then it calls PDTRMR2D for the inverse
  * redistribution and checks the results with the initial data.
- * 
+ *
  * Data are going from a Block Scattered nbrow0 x nbcol0 decomposition on the
  * processor grid p0 x q0, to data distributed in a BS nbrow1 x nbcol1 on the
  * processor grid p1 x q1, then back to the BS nbrow0 x nbcol0 decomposition
  * on the processor grid p0 x q0.
- * 
+ *
  * See pdtrmr.c file for detailed info on the PDTRMR2D function.
- * 
- * 
+ *
+ *
  * The testing parameters are read from the file TRMR2D.dat, see the file in the
  * distribution to have an example.
- * 
+ *
  * created by Bernard Tourancheau in April 1994.
- * 
+ *
  * modifications : see sccs history
- * 
+ *
  * ===================================
- * 
- * 
+ *
+ *
  * NOTE :
- * 
+ *
  * - the matrix elements are DOUBLE PRECISION
- * 
+ *
  * - memory requirements : this procedure requires approximately 3 times the
  * memory space of the initial data block in grid 0 (initial block, copy for
  * test and second redistribution result) and 1 time the memory space of the
  * result data block in grid 1. with  the element size = sizeof(double)
  * bytes,
- * 
- * 
+ *
+ *
  * - use the procedures of the files:
- * 
+ *
  * pdtrmr.o pdtrmr2.o pdtrmraux.o
- * 
- * 
+ *
+ *
  * ======================================
- * 
+ *
  * WARNING ASSUMPTIONS :
- * 
- * 
+ *
+ *
  * ========================================
- * 
- * 
+ *
+ *
  * Planned changes:
- * 
- * 
- * 
+ *
+ *
+ *
  * ========================================= */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pdtrmr2do_
-#define fortran_mr2dnew pdtrmr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PDTRMR2D
-#define fortran_mr2d PDTRMR2DO
-#define dcopy_ DCOPY
-#define dlacpy_ DLACPY
-#else
-#define fortran_mr2d pdtrmr2do
-#define fortran_mr2dnew pdtrmr2d
-#define dcopy_ dcopy
-#define dlacpy_ dlacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pdtrmr2do, PDTRMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pdtrmr2d, PDTRMR2D)
+#define dcopy_ FC_GLOBAL(dcopy, DCOPY)
+#define dlacpy_ FC_GLOBAL(dlacpy, DLACPY)
+
 #define Clacpy Cdtrlacpy
 void  Clacpy();
 typedef struct {
@@ -175,12 +168,12 @@ initblock(double *block, Int m, Int n)
  * parameters to read is given by a NULL at the end of the args list */
 #ifdef __STDC__
 #include <stdarg.h>
-static void 
+static void
 getparam(FILE * f,...)
 {
 #else
 #include <varargs.h>
-static void 
+static void
 getparam(va_alist)
 va_dcl
 {
@@ -219,7 +212,7 @@ va_dcl
   }
   va_end(ap);
 }
-void 
+void
 initforpvm(Int argc, char *argv[])
 {
   Int   pnum, nproc;

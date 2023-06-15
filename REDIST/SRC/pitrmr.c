@@ -1,3 +1,4 @@
+#include <FCMangle.h>
 #include "redist.h"
 /** $Id: pitrmr.c,v 1.1.1.1 2000/02/15 18:04:08 susan Exp $
   ------------------------------------------------------------------------
@@ -156,20 +157,12 @@
    Modifications by Loic PRYLLI 1995
    ============================================================ */
 #define static2 static
-#if defined(Add_) || defined(f77IsF2C)
-#define fortran_mr2d pitrmr2do_
-#define fortran_mr2dnew pitrmr2d_
-#elif defined(UpCase)
-#define fortran_mr2dnew PITRMR2D
-#define fortran_mr2d PITRMR2DO
-#define icopy_ ICOPY
-#define ilacpy_ ILACPY
-#else
-#define fortran_mr2d pitrmr2do
-#define fortran_mr2dnew pitrmr2d
-#define icopy_ icopy
-#define ilacpy_ ilacpy
-#endif
+
+#define fortran_mr2d FC_GLOBAL(pitrmr2do, PITRMR2DO)
+#define fortran_mr2dnew FC_GLOBAL(pitrmr2d, PITRMR2D)
+#define icopy_ FC_GLOBAL(icopy, ICOPY)
+#define ilacpy_ FC_GLOBAL(ilacpy, ILACPY)
+
 #define Clacpy Citrlacpy
 void  Clacpy();
 typedef struct {
@@ -255,7 +248,7 @@ extern void Cpitrmr2d();
 #include <stdlib.h>
 #include <assert.h>
 #define DESCLEN 9
-void 
+void
 fortran_mr2d(char *uplo, char *diag, Int *m, Int *n, Int *A, Int *ia, Int *ja, Int desc_A[DESCLEN],
 	     Int *B, Int *ib, Int *jb, Int desc_B[DESCLEN])
 {
@@ -263,7 +256,7 @@ fortran_mr2d(char *uplo, char *diag, Int *m, Int *n, Int *A, Int *ia, Int *ja, I
 	     B, *ib, *jb, (MDESC *) desc_B);
   return;
 }
-void 
+void
 fortran_mr2dnew(char *uplo, char *diag, Int *m, Int *n, Int *A, Int *ia, Int *ja, Int desc_A[DESCLEN],
 		Int *B, Int *ib, Int *jb, Int desc_B[DESCLEN], Int *gcontext)
 {
@@ -583,7 +576,7 @@ after_comm:
   free(h_inter);
   free(param);
 }/* distrib */
-static2 void 
+static2 void
 init_chenille(Int mypnum, Int nprocs, Int n0, Int *proc0, Int n1, Int *proc1, Int **psend, Int **precv, Int *myrang)
 {
   Int   ns, nr, i, tot;
@@ -637,7 +630,7 @@ init_chenille(Int mypnum, Int nprocs, Int n0, Int *proc0, Int n1, Int *proc1, In
       assert(nr <= n1);
     }
 }
-void 
+void
 Clacpy(Int m, Int n, Int *a, Int lda, Int *b, Int ldb)
 {
   Int   i, j;
@@ -651,7 +644,7 @@ Clacpy(Int m, Int n, Int *a, Int lda, Int *b, Int ldb)
     a += lda;
   }
 }
-static2 void 
+static2 void
 gridreshape(Int *ctxtp)
 {
   Int   ori, final;	/* original context, and new context created, with
